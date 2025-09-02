@@ -21,9 +21,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     'Business',
     'Media',
   ];
-  
+
   final Map<String, Color> colors = {
-    'HR': Color.fromARGB(179, 1, 68, 126),
+    'HR': const Color.fromARGB(179, 1, 68, 126),
     'Logistics': Colors.green,
     'Assistant': Colors.orange,
     'Business': Colors.purple,
@@ -65,7 +65,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             if (state is BranchMembersLoaded) {
               final members = state.members;
 
-              // حساب الحضور والغياب
+              /// اجمالي عدد المشاركين
+              final totalParticipants = members.length;
+
+              /// احصائيات حسب الفريق
               Map<String, double> attendedCounts = {
                 for (var team in teams) team: 0.0,
               };
@@ -75,7 +78,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 final team = attendee.team.trim();
                 if (teams.contains(team)) {
                   totalCounts[team] = (totalCounts[team] ?? 0) + 1;
-                  // نفترض أن عندك attendance في الموديل
                   if (attendee.attended == true) {
                     attendedCounts[team] = (attendedCounts[team] ?? 0) + 1.0;
                   }
@@ -85,16 +87,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
               final totalAttendance = attendedCounts.values
                   .fold(0.0, (a, b) => a + b)
                   .toInt();
-              final totalParticipants = totalCounts.values.fold(
-                0,
-                (a, b) => a + b,
-              );
 
               return RefreshIndicator(
                 onRefresh: () async =>
                     context.read<BranchMembersCubit>().loadBranchMembers(),
                 child: ListView(
                   children: [
+                    // الهيدر
                     Row(
                       children: [
                         IconButton(
@@ -106,7 +105,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         const Spacer(flex: 1),
                         Center(
                           child: Text(
-                            'Total Participants: $totalParticipants   ',
+                            'Total Participants: $totalParticipants',
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -118,6 +117,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ],
                     ),
 
+                    // الحضور والغياب الكلي
                     Center(
                       child: RichText(
                         text: TextSpan(
@@ -143,7 +143,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 24),
+
+                    // دايرة الحضور
                     PieChart(
                       dataMap: attendedCounts,
                       colorList: teams.map((t) => colors[t]!).toList(),
@@ -158,9 +161,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                       chartType: ChartType.disc,
                     ),
+
                     const SizedBox(height: 24),
 
-                    // Export Button (Excel)
+                    // زرار تحميل
                     SizedBox(
                       width: double.infinity,
                       height: 55,
@@ -176,7 +180,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           size: 25,
                         ),
                         label: const Text(
-                          'Download Attendance ',
+                          'Download Attendance',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -192,9 +196,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 20),
 
-                    // Cards per team
+                    // كروت الفرق
                     ...teams.map((team) {
                       final attended = attendedCounts[team]?.toInt() ?? 0;
                       final total = totalCounts[team] ?? 0;

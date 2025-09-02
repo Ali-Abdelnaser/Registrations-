@@ -18,9 +18,9 @@ class Attendee {
   factory Attendee.fromMap(Map<String, dynamic> map) {
     return Attendee(
       id: map['id'],
-      name: map['name'],
+      name: map['Name'],
       email: map['email'],
-      team: map['team'],
+      team: map['Team'],
       attended: map['attended'] ?? false,
       scanTime: map['scan_time'] != null
           ? DateTime.parse(map['scan_time'])
@@ -31,8 +31,8 @@ class Attendee {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'name': name,
-      'team': team,
+      'Name': name,
+      'Team': team,
       'attended': attended,
       'scan_time': scanTime?.toIso8601String(),
     };

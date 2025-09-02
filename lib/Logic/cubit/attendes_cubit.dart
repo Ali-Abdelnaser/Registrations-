@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:registration/Logic/cubit/attendes_state.dart';
 import 'package:registration/data/models/attendee.dart';
@@ -5,7 +6,7 @@ import 'package:registration/data/repositories/attendee_repository.dart';
 
 class BranchMembersCubit extends Cubit<BranchMembersState> {
   final AuthRepository repository;
-  Stream<List<Attendee>>? _stream;
+  StreamSubscription<List<Attendee>>? _subscription;
 
   BranchMembersCubit(this.repository) : super(BranchMembersInitial());
 
@@ -13,8 +14,8 @@ class BranchMembersCubit extends Cubit<BranchMembersState> {
   void loadBranchMembers() {
     emit(BranchMembersLoading());
     try {
-      _stream = repository.streamBranchMembers();
-      _stream!.listen(
+      _subscription?.cancel(); // يلغي أي استريم قديم
+      _subscription = repository.streamBranchMembers().listen(
         (members) => emit(BranchMembersLoaded(members)),
         onError: (error) => emit(BranchMembersError(error.toString())),
       );
@@ -35,22 +36,28 @@ class BranchMembersCubit extends Cubit<BranchMembersState> {
   }
 
   /// ✅ تعديل
-  Future<void> updateMember(int id, Map<String, dynamic> updates) async {
+  Future<void> updateMember(String id, Map<String, dynamic> updates) async {
     try {
       await repository.updateBranchMember(id, updates);
-      emit(BranchMemberUpdated());
+      // مفيش داعي تبعت State جديد هنا، الاستريم هيجيب الداتا بعد التحديث
     } catch (e) {
       emit(BranchMembersError(e.toString()));
     }
   }
 
   /// ✅ مسح
-  Future<void> deleteMember(int id) async {
+  Future<void> deleteMember(String id) async {
     try {
       await repository.deleteBranchMember(id);
-      emit(BranchMemberDeleted());
+      // نفس الكلام، الاستريم هيعمل التحديث تلقائي
     } catch (e) {
       emit(BranchMembersError(e.toString()));
     }
+  }
+
+  @override
+  Future<void> close() {
+    _subscription?.cancel();
+    return super.close();
   }
 }
