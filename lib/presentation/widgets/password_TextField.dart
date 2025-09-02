@@ -25,7 +25,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      cursorColor: Colors.blueAccent,
+      cursorColor: Color.fromARGB(255, 6, 113, 167),
       style: const TextStyle(color: Colors.black87, fontSize: 16),
       onChanged: widget.onChanged,
       validator: widget.validator,
@@ -37,21 +37,18 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
           vertical: 16,
         ),
         prefixIcon: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: SvgPicture.asset(
-            widget.icon,
-            width: 24,
-            height: 24,
-            colorFilter: const ColorFilter.mode(
-              Colors.blueAccent,
-              BlendMode.srcIn,
-            ),
+          padding: const EdgeInsets.all(16.0),
+          child: Icon(
+            Icons.lock_outline_rounded, // هنا حط الايقونة اللي انت عاوزها
+            size: 32,
+            color: Color.fromARGB(255, 6, 113, 167),
           ),
         ),
+
         suffixIcon: IconButton(
           icon: Icon(
             _obscureText ? Icons.visibility_off : Icons.visibility,
-            color: Colors.blueAccent,
+            color: Color.fromARGB(255, 6, 113, 167),
           ),
           onPressed: () {
             setState(() {
@@ -69,7 +66,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color: Colors.blueAccent, width: 1.5),
+          borderSide: const BorderSide(color: Color.fromARGB(255, 6, 113, 167), width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),

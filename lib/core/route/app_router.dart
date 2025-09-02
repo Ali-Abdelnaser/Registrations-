@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:registration/core/constants/app_strings.dart';
 import 'package:registration/presentation/screens/onbording/start_page.dart';
+import 'package:registration/presentation/widgets/Batton_aoo_bar.dart';
 
 class AppRouter {
 
@@ -9,6 +10,8 @@ class AppRouter {
     switch (settings.name) {
       case Start:
         return MaterialPageRoute(builder: (_) => const OnBoardingScreen());
+      case BottomNav:
+        return MaterialPageRoute(builder: (_) => const ModernBottomNav());
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

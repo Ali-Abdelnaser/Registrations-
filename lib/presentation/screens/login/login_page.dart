@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:registration/presentation/widgets/Batton_aoo_bar.dart';
+import 'package:registration/presentation/widgets/navigator.dart';
 import 'package:registration/presentation/widgets/password_TextField.dart';
 import 'package:registration/presentation/widgets/text-filed.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -34,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
         ).showSnackBar(const SnackBar(content: Text("تم تسجيل الدخول بنجاح")));
 
         // تروح للـ Home أو Dashboard
-        Navigator.pushReplacementNamed(context, "/home");
+        AppNavigator.fade(context, ModernBottomNav());
       }
     } catch (e) {
       // ❌ فشل
@@ -67,9 +69,10 @@ class _LoginPageState extends State<LoginPage> {
               CustomTextField(
                 icon: "assets/icons/mail.svg",
                 hint: "Email",
+                onChanged: (val) => _email = val,
                 validator: (val) {
                   if (val == null || val.isEmpty) {
-                    return "البريد الإلكتروني مطلوب";
+                    return "Email is required";
                   }
                   return null;
                 },
@@ -83,9 +86,7 @@ class _LoginPageState extends State<LoginPage> {
               PasswordTextField(
                 icon: "assets/icons/lock.svg",
                 hint: "Enter your password",
-                onChanged: (value) {
-                  print("Password: $value");
-                },
+                onChanged: (val) => _password = val,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Password is required";
