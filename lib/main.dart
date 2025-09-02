@@ -9,7 +9,7 @@ Future<void> main() async {
   await Supabase.initialize(
     url: 'https://tmxvrsprlocndjmlhuld.supabase.co',
     anonKey:
-        '<prefer publishable key instead of anon key for mobile and desktop apps>',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRteHZyc3BybG9jbmRqbWxodWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3NTg4MjEsImV4cCI6MjA3MjMzNDgyMX0.P27BVnFsf3VRJdmMadQDi0uLJc3Bwewxzdo9j7KeI2k',
   );
   runApp(MyApp());
 }

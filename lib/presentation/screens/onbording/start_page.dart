@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:registration/presentation/screens/login/login_page.dart';
 import 'package:registration/presentation/widgets/navigator.dart';
+
 class OnBoardingScreen extends StatelessWidget {
   const OnBoardingScreen({super.key});
 
@@ -30,7 +32,6 @@ class OnBoardingScreen extends StatelessWidget {
               ),
 
               const Spacer(), // يزق الكلام والزر لتحت
-
               // الكلام
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: size.width * 0.08),
@@ -64,7 +65,7 @@ class OnBoardingScreen extends StatelessWidget {
               // الزر
               GestureDetector(
                 onTap: () {
-                  AppNavigator.fade(context, LoginScreen(),replace: true);
+                  AppNavigator.fade(context, LoginPage(), replace: true);
                 },
                 child: Container(
                   width: size.width * 0.15,
@@ -75,7 +76,12 @@ class OnBoardingScreen extends StatelessWidget {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: const Color.fromARGB(181, 0, 140, 255).withOpacity(0.7),
+                        color: const Color.fromARGB(
+                          181,
+                          0,
+                          140,
+                          255,
+                        ).withOpacity(0.7),
                         spreadRadius: 8,
                         blurRadius: 10,
                       ),

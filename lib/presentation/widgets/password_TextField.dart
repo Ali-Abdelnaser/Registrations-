@@ -1,33 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class CustomTextField extends StatelessWidget {
+class PasswordTextField extends StatefulWidget {
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
   final String icon;
   final String hint;
-  final TextInputType keyboardType;
-  final bool obscureText;
 
-  const CustomTextField({
+  const PasswordTextField({
     super.key,
     this.onChanged,
+    this.validator,
     required this.icon,
     required this.hint,
-    this.validator,
-    this.keyboardType = TextInputType.text,
-    this.obscureText = false,
   });
+
+  @override
+  State<PasswordTextField> createState() => _PasswordTextFieldState();
+}
+
+class _PasswordTextFieldState extends State<PasswordTextField> {
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       cursorColor: Colors.blueAccent,
       style: const TextStyle(color: Colors.black87, fontSize: 16),
-      onChanged: onChanged,
-      validator: validator,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
+      onChanged: widget.onChanged,
+      validator: widget.validator,
+      obscureText: _obscureText, // 👈 هنا بيتغير مع الضغط على الأيقونة
+      keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -36,7 +39,7 @@ class CustomTextField extends StatelessWidget {
         prefixIcon: Padding(
           padding: const EdgeInsets.all(12.0),
           child: SvgPicture.asset(
-            icon,
+            widget.icon,
             width: 24,
             height: 24,
             colorFilter: const ColorFilter.mode(
@@ -45,7 +48,18 @@ class CustomTextField extends StatelessWidget {
             ),
           ),
         ),
-        hintText: hint,
+        suffixIcon: IconButton(
+          icon: Icon(
+            _obscureText ? Icons.visibility_off : Icons.visibility,
+            color: Colors.blueAccent,
+          ),
+          onPressed: () {
+            setState(() {
+              _obscureText = !_obscureText;
+            });
+          },
+        ),
+        hintText: widget.hint,
         hintStyle: TextStyle(color: Colors.grey[500], fontSize: 15),
         filled: true,
         fillColor: Colors.grey[100],
