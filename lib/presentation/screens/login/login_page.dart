@@ -4,7 +4,6 @@ import 'package:registration/presentation/widgets/Batton_aoo_bar.dart';
 import 'package:registration/presentation/widgets/navigator.dart';
 import 'package:registration/presentation/widgets/password_TextField.dart';
 import 'package:registration/presentation/widgets/text-filed.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
