@@ -1,4 +1,4 @@
-   const String splash = '/';
+   const String Start = '/';
    const String login = '/login';
    const String dashboard = '/dashboard';
    const String scan = '/scan';
