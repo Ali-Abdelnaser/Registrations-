@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:registration/data/repositories/attendee_repository.dart';
 import 'package:registration/presentation/widgets/Batton_aoo_bar.dart';
 import 'package:registration/presentation/widgets/navigator.dart';
 import 'package:registration/presentation/widgets/password_TextField.dart';
@@ -24,12 +25,10 @@ class _LoginPageState extends State<LoginPage> {
     setState(() => _isLoading = true);
 
     try {
-      final response = await Supabase.instance.client.auth.signInWithPassword(
-        email: _email,
-        password: _password,
-      );
+      final authRepo = AuthRepository();
+      final user = await authRepo.signIn(_email, _password);
 
-      if (response.user != null) {
+      if (user != null) {
         // ✅ نجاح
         ScaffoldMessenger.of(
           context,
@@ -37,6 +36,11 @@ class _LoginPageState extends State<LoginPage> {
 
         // تروح للـ Home أو Dashboard
         AppNavigator.fade(context, ModernBottomNav());
+      } else {
+        // ❌ لو رجع null
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("البريد أو كلمة المرور غير صحيحة")),
+        );
       }
     } catch (e) {
       // ❌ فشل

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:registration/presentation/widgets/navigator.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SearchPage extends StatefulWidget {
