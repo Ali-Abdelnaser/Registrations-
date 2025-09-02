@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:registration/core/constants/app_strings.dart';
 import 'package:registration/presentation/screens/onbording/start_page.dart';
-import 'package:registration/presentation/widgets/Batton_aoo_bar.dart';
+import 'package:registration/presentation/screens/Bottom%20App%20Bar/Batton_aoo_bar.dart';
 
 class AppRouter {
 

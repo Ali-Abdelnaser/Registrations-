@@ -25,7 +25,7 @@ class AuthRepository {
       throw Exception("SignIn Error: $e");
     }
   }
-
+  
   Future<List<Attendee>> getBranchMembers() async {
     try {
       final response = await _supabase.from('Branch_Members').select();

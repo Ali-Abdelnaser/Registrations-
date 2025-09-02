@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:registration/core/constants/app_colors.dart';
 
 
 class PasswordTextField extends StatefulWidget {
@@ -25,7 +26,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      cursorColor: Color.fromARGB(255, 6, 113, 167),
+      cursorColor: AppColors.Blue,
       style: const TextStyle(color: Colors.black87, fontSize: 16),
       onChanged: widget.onChanged,
       validator: widget.validator,
@@ -41,14 +42,14 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
           child: Icon(
             Icons.lock_outline_rounded, // هنا حط الايقونة اللي انت عاوزها
             size: 32,
-            color: Color.fromARGB(255, 6, 113, 167),
+            color:AppColors.Blue,
           ),
         ),
 
         suffixIcon: IconButton(
           icon: Icon(
             _obscureText ? Icons.visibility_off : Icons.visibility,
-            color: Color.fromARGB(255, 6, 113, 167),
+            color: AppColors.Blue,
           ),
           onPressed: () {
             setState(() {
@@ -66,7 +67,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color: Color.fromARGB(255, 6, 113, 167), width: 1.5),
+          borderSide: const BorderSide(color: AppColors.Blue, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),

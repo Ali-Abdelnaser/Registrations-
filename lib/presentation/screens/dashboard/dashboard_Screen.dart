@@ -4,12 +4,11 @@ import 'package:pie_chart/pie_chart.dart';
 import 'package:registration/Logic/cubit/attendes_cubit.dart';
 import 'package:registration/Logic/cubit/attendes_state.dart';
 import 'package:registration/data/models/attendee.dart';
-import 'package:registration/presentation/screens/team_absent.dart';
+import 'package:registration/presentation/screens/Team%20Absent/team_absent.dart';
 import 'package:registration/presentation/widgets/navigator.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
-
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
@@ -22,7 +21,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     'Business',
     'Media',
   ];
-
+  
   final Map<String, Color> colors = {
     'HR': Color.fromARGB(179, 1, 68, 126),
     'Logistics': Colors.green,

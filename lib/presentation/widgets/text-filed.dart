@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:registration/core/constants/app_colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final Function(String)? onChanged;
@@ -21,7 +22,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      cursorColor: Color.fromARGB(255, 6, 113, 167),
+      cursorColor: AppColors.Blue,
       style: const TextStyle(color: Colors.black87, fontSize: 16),
       onChanged: onChanged,
       validator: validator,
@@ -37,7 +38,7 @@ class CustomTextField extends StatelessWidget {
           child: Icon(
             Icons.email_outlined, // هنا حط الايقونة اللي انت عاوزها
             size: 32,
-            color: Color.fromARGB(255, 6, 113, 167),
+            color: AppColors.Blue,
           ),
         ),
 
@@ -51,10 +52,7 @@ class CustomTextField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(
-            color: Color.fromARGB(255, 6, 113, 167),
-            width: 1.5,
-          ),
+          borderSide: const BorderSide(color: AppColors.Blue, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
