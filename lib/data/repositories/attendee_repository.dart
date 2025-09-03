@@ -108,4 +108,18 @@ class AuthRepository {
         })
         .eq('id', id);
   }
+
+  Future<bool> addBranchMember(Map<String, dynamic> data) async {
+  try {
+    await _supabase.from('Branch_Members').insert(data);
+    return true;
+  } catch (e) {
+    if (e.toString().contains("duplicate") ||
+        e.toString().contains("conflict")) {
+      throw Exception("Member already exists");
+    }
+    throw Exception("Insert failed: $e");
+  }
+}
+
 }

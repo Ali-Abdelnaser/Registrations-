@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:registration/presentation/screens/Add%20Member/add_member.dart';
 import 'package:registration/presentation/screens/attendees/scanned_participants_screen.dart';
 import 'package:registration/presentation/screens/scan/qr_scan.dart';
 import 'package:registration/presentation/widgets/navigator.dart';
@@ -72,9 +73,9 @@ class HomePage extends StatelessWidget {
                       ),
                       _buildGridItem(
                         context,
-                        Icons.people,
-                        "Participants",
-                        ScannedParticipantsScreen(),
+                        Icons.add_circle_outline,
+                        "Add New Member",
+                        AddMemberScreen(),
                       ),
                       _buildGridItem(
                         context,

@@ -24,6 +24,34 @@ class BranchMembersCubit extends Cubit<BranchMembersState> {
     }
   }
 
+  Future<void> addMember({
+  required String id,
+  required String name,
+  required String email,
+  required String team,
+}) async {
+  try {
+    final success = await repository.addBranchMember({
+      'id': id,
+      'Name': name,
+      'email': email,
+      'Team': team,
+      'attendance': false,
+      'scannedAt': null,
+    });
+
+    if (!success) {
+      emit(BranchMembersError("Failed to insert member"));
+    } else {
+      // تقدر تعمل emit لنجاح هنا لو عايز
+    }
+  } catch (e) {
+    emit(BranchMembersError(e.toString()));
+    rethrow; // 👈 دي مهمة عشان الـ UI يقدر يلتقط الغلط في onPressed
+  }
+}
+
+
   /// ✅ بحث
   Future<void> searchMembers(String query) async {
     emit(BranchMembersLoading());
@@ -46,10 +74,13 @@ class BranchMembersCubit extends Cubit<BranchMembersState> {
   }
 
   /// ✅ مسح
-  Future<void> deleteMember(String id) async {
+  Future<void> resetAttendance(String id) async {
     try {
-      await repository.deleteBranchMember(id);
-      // نفس الكلام، الاستريم هيعمل التحديث تلقائي
+      await repository.updateBranchMember(id, {
+        'attendance': false,
+        'scannedAt': null, // ✅ هنخليها فاضية
+      });
+      // الاستريم هيعمل التحديث تلقائي
     } catch (e) {
       emit(BranchMembersError(e.toString()));
     }

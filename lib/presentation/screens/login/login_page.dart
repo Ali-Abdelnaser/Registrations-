@@ -65,13 +65,13 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 50),
 
               // ✅ الصورة فوق
-              Center(child: Image.asset("assets/img/vector.png", height: 300)),
+              Center(child: Image.asset("assets/img/login.png", height: 300)),
 
               const SizedBox(height: 40),
 
               // ✅ Email field
               CustomTextField(
-                icon: "assets/icons/mail.svg",
+                icon: Icons.email_outlined,
                 hint: "Email",
                 onChanged: (val) => _email = val,
                 validator: (val) {

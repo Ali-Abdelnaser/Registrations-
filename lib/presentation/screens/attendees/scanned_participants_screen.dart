@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:registration/Logic/cubit/attendes_cubit.dart';
 import 'package:registration/Logic/cubit/attendes_state.dart';
-import 'package:registration/presentation/widgets/navigator.dart';
-import 'package:registration/presentation/screens/Home%20Page/home_page.dart';
+import 'package:intl/intl.dart';
 
 class ScannedParticipantsScreen extends StatefulWidget {
   const ScannedParticipantsScreen({super.key});
@@ -20,6 +19,26 @@ class _ScannedParticipantsScreenState extends State<ScannedParticipantsScreen> {
   void initState() {
     super.initState();
     context.read<BranchMembersCubit>().loadBranchMembers();
+  }
+
+  String _formatTimestamp(dynamic timestamp) {
+    if (timestamp == null) return "Not scanned yet";
+
+    try {
+      DateTime dateTime;
+
+      if (timestamp is DateTime) {
+        dateTime = timestamp;
+      } else if (timestamp is String) {
+        dateTime = DateTime.parse(timestamp);
+      } else {
+        return "Invalid date";
+      }
+
+      return DateFormat('dd MMM yyyy • hh:mm a').format(dateTime);
+    } catch (e) {
+      return "Invalid date";
+    }
   }
 
   @override
@@ -146,13 +165,14 @@ class _ScannedParticipantsScreenState extends State<ScannedParticipantsScreen> {
                                 ),
                               ),
                               subtitle: Text(
-                                person.email,
+                                _formatTimestamp(person.scannedAt),
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 12,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
+
                               trailing: IconButton(
                                 icon: const Icon(
                                   Icons.delete_rounded,
@@ -160,9 +180,7 @@ class _ScannedParticipantsScreenState extends State<ScannedParticipantsScreen> {
                                   size: 30,
                                 ),
                                 onPressed: () {
-                                  context
-                                      .read<BranchMembersCubit>()
-                                      .deleteMember(person.id);
+                                   context.read<BranchMembersCubit>().resetAttendance(person.id);
                                 },
                               ),
                             ),

@@ -14,7 +14,7 @@ SnackBar CustomSnakBar({
     margin: const EdgeInsets.all(10),
     duration: const Duration(seconds: 3),
     content: Row(
-      crossAxisAlignment: CrossAxisAlignment.center, // أيقونة في النص
+      crossAxisAlignment: CrossAxisAlignment.center,    
       children: [
         Icon(icon, color: iconColor, size: 22),
         const SizedBox(width: 8),

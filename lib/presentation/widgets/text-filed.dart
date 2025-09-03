@@ -4,7 +4,7 @@ import 'package:registration/core/constants/app_colors.dart';
 class CustomTextField extends StatelessWidget {
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
-  final String icon;
+  final IconData icon;
   final String hint;
   final TextInputType keyboardType;
   final bool obscureText;
@@ -36,7 +36,7 @@ class CustomTextField extends StatelessWidget {
         prefixIcon: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Icon(
-            Icons.email_outlined, // هنا حط الايقونة اللي انت عاوزها
+            icon, // هنا حط الايقونة اللي انت عاوزها
             size: 32,
             color: AppColors.Blue,
           ),

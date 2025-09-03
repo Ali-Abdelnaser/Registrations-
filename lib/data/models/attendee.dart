@@ -4,7 +4,7 @@ class Attendee {
   final String team;
   final String email;
   final bool attendance;
-  final DateTime? scanTime;
+  final DateTime? scannedAt;
 
   Attendee({
     required this.id,
@@ -12,7 +12,7 @@ class Attendee {
     required this.email,
     required this.team,
     this.attendance = false,
-    this.scanTime,
+    this.scannedAt,
   });
 
   factory Attendee.fromMap(Map<String, dynamic> map) {
@@ -22,8 +22,8 @@ class Attendee {
       email: map['email'],
       team: map['Team'],
       attendance: map['attendance'] ?? false,
-      scanTime: map['scan_time'] != null
-          ? DateTime.parse(map['scan_time'])
+      scannedAt: map['scannedAt'] != null
+          ? DateTime.parse(map['scannedAt'])
           : null,
     );
   }
@@ -34,7 +34,7 @@ class Attendee {
       'Name': name,
       'Team': team,
       'attendance': attendance,
-      'scan_time': scanTime?.toIso8601String(),
+      'scannedAt': scannedAt?.toIso8601String(),
     };
   }
 }
