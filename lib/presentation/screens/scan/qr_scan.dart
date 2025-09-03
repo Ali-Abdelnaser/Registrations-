@@ -146,13 +146,16 @@ class _QRViewScreenState extends State<QRViewScreen> {
         listener: (context, state) async {
           if (state is QrError) {
             _showErrorDialog('Invalid QR ⚠️', state.message);
+            setState(() => isScanned = false);
           } else if (state is QrAlreadyScanned) {
             _showErrorDialog(
               'Already Scanned',
               'This person has already been scanned.',
             );
-          } else if (state is QrConfirmSuccess) {
+            setState(() => isScanned = false);
+          } else if (state is QrFound) {
             final member = state.member;
+
             await Navigator.push(
               context,
               MaterialPageRoute(
@@ -162,7 +165,7 @@ class _QRViewScreenState extends State<QRViewScreen> {
                     'name': member.name,
                     'email': member.email,
                     'team': member.team,
-                    'attendance': member.attended,
+                    'attendance': member.attendance,
                   },
                   onConfirm: (_) async {
                     await context.read<QrScanCubit>().confirmAttendance(
@@ -172,6 +175,8 @@ class _QRViewScreenState extends State<QRViewScreen> {
                 ),
               ),
             );
+            // ✅ رجع الكاميرا تشتغل تاني
+            setState(() => isScanned = false);
           }
         },
         child: Stack(
@@ -179,10 +184,14 @@ class _QRViewScreenState extends State<QRViewScreen> {
             MobileScanner(
               controller: controller,
               onDetect: (capture) {
+                for (final barcode in capture.barcodes) {
+                  debugPrint("QR Detected: ${barcode.rawValue}");
+                }
+
                 final code = capture.barcodes.first.rawValue;
                 if (code != null && !isScanned) {
                   setState(() => isScanned = true);
-                  controller.stop();
+                  debugPrint("Sending QR to cubit: $code");
                   context.read<QrScanCubit>().scanQr(code);
                 }
               },

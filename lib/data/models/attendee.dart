@@ -3,7 +3,7 @@ class Attendee {
   final String name;
   final String team;
   final String email;
-  final bool attended;
+  final bool attendance;
   final DateTime? scanTime;
 
   Attendee({
@@ -11,7 +11,7 @@ class Attendee {
     required this.name,
     required this.email,
     required this.team,
-    this.attended = false,
+    this.attendance = false,
     this.scanTime,
   });
 
@@ -21,7 +21,7 @@ class Attendee {
       name: map['Name'],
       email: map['email'],
       team: map['Team'],
-      attended: map['attended'] ?? false,
+      attendance: map['attendance'] ?? false,
       scanTime: map['scan_time'] != null
           ? DateTime.parse(map['scan_time'])
           : null,
@@ -33,7 +33,7 @@ class Attendee {
       'id': id,
       'Name': name,
       'Team': team,
-      'attended': attended,
+      'attendance': attendance,
       'scan_time': scanTime?.toIso8601String(),
     };
   }

@@ -56,9 +56,9 @@ class _ModernBottomNavState extends State<ModernBottomNav> {
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
+            color: AppColors.Blue.withValues(alpha: 0.8),
+            blurRadius: 10,
+            // offset: const Offset(3, 3),
           ),
         ],
       ),

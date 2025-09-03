@@ -19,7 +19,7 @@ class QrScanCubit extends Cubit<QrScanState> {
         return;
       }
 
-      if (attendee.attended == true) {
+      if (attendee.attendance == true) {
         emit(QrAlreadyScanned(attendee));
       } else {
         emit(QrFound(attendee));
@@ -43,7 +43,7 @@ class QrScanCubit extends Cubit<QrScanState> {
 
       // نعمل Update في Supabase
       await repository.updateBranchMember(memberId, {
-        'attended': true, // ✅ تأكد إن اسم العمود زي ما في الجدول
+        'attendance': true, // ✅ تأكد إن اسم العمود زي ما في الجدول
         'scannedAt': DateTime.now().toUtc().toIso8601String(),
       });
 

@@ -45,7 +45,7 @@ class _ScannedParticipantsScreenState extends State<ScannedParticipantsScreen> {
         if (state is BranchMembersLoaded) {
           // ✅ فلترة الحاضرين بس
           final attendees = state.members
-              .where((m) => m.attended == true)
+              .where((m) => m.attendance == true)
               .where(
                 (m) =>
                     m.name.toLowerCase().contains(searchQuery.toLowerCase()) ||
@@ -71,122 +71,108 @@ class _ScannedParticipantsScreenState extends State<ScannedParticipantsScreen> {
 
           return Scaffold(
             backgroundColor: Colors.white,
-            body: Column(
-              children: [
-                const SizedBox(height: 50),
-                // 🔍 Search
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        onPressed: () =>
-                            AppNavigator.fade(context, const HomePage()),
-                        color: Colors.black54,
+            body: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  const SizedBox(height: 50),
+                  // 🔍 Search
+                  TextField(
+                    onChanged: (q) =>
+                        setState(() => searchQuery = q.toLowerCase()),
+                    decoration: InputDecoration(
+                      hintText: 'Search by name or email...',
+                      hintStyle: const TextStyle(color: Color(0xff016da6)),
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: Color(0xff016da6),
                       ),
-                      Expanded(
-                        child: TextField(
-                          onChanged: (q) =>
-                              setState(() => searchQuery = q.toLowerCase()),
-                          decoration: InputDecoration(
-                            hintText: 'Search by name or email...',
-                            hintStyle: const TextStyle(
-                              color: Color(0xff016da6),
-                            ),
-                            prefixIcon: const Icon(
-                              Icons.search,
-                              color: Color(0xff016da6),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(
-                                color: Color(0xff016da6),
-                                width: 1.5,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(
-                                color: Color(0xff016da6),
-                                width: 2,
-                              ),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(
-                                color: Color(0xff016da6),
-                                width: 1.5,
-                              ),
-                            ),
-                          ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: const BorderSide(
+                          color: Color(0xff016da6),
+                          width: 1.5,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                // 📋 Participants List
-                Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      context.read<BranchMembersCubit>().loadBranchMembers();
-                    },
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      itemCount: attendees.length + 1,
-                      itemBuilder: (context, index) {
-                        if (index == attendees.length) {
-                          return const SizedBox(height: 120);
-                        }
-                        final person = attendees[index];
-                        return Card(
-                          color: const Color(0xff016da6),
-                          margin: const EdgeInsets.all(12),
-                          elevation: 4,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: ListTile(
-                            leading: const Icon(
-                              Icons.check,
-                              color: Colors.white,
-                            ),
-                            title: Text(
-                              person.name,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            subtitle: Text(
-                              person.email,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            trailing: IconButton(
-                              icon: const Icon(
-                                Icons.delete_rounded,
-                                color: Colors.red,
-                                size: 30,
-                              ),
-                              onPressed: () {
-                                context.read<BranchMembersCubit>().deleteMember(
-                                  person.id,
-                                );
-                              },
-                            ),
-                          ),
-                        );
-                      },
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                          color: Color(0xff016da6),
+                          width: 2,
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                          color: Color(0xff016da6),
+                          width: 1.5,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+
+                  // 📋 Participants List
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        context.read<BranchMembersCubit>().loadBranchMembers();
+                      },
+                      child: ListView.builder(
+                        itemCount: attendees.length + 1,
+                        itemBuilder: (context, index) {
+                          if (index == attendees.length) {
+                            return const SizedBox(height: 120);
+                          }
+                          final person = attendees[index];
+                          return Card(
+                            color: const Color(0xff016da6),
+                            margin: const EdgeInsets.all(6),
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: ListTile(
+                              leading: const Icon(
+                                Icons.check,
+                                color: Colors.white,
+                              ),
+                              title: Text(
+                                person.name,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              subtitle: Text(
+                                person.email,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              trailing: IconButton(
+                                icon: const Icon(
+                                  Icons.delete_rounded,
+                                  color: Colors.red,
+                                  size: 30,
+                                ),
+                                onPressed: () {
+                                  context
+                                      .read<BranchMembersCubit>()
+                                      .deleteMember(person.id);
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         }

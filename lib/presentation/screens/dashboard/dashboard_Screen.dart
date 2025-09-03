@@ -78,7 +78,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 final team = attendee.team.trim();
                 if (teams.contains(team)) {
                   totalCounts[team] = (totalCounts[team] ?? 0) + 1;
-                  if (attendee.attended == true) {
+                  if (attendee.attendance == true) {
                     attendedCounts[team] = (attendedCounts[team] ?? 0) + 1.0;
                   }
                 }
@@ -94,29 +94,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: ListView(
                   children: [
                     // الهيدر
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.arrow_back),
-                          onPressed: () {
-                            // AppNavigator.fade(context, CustomBottomAppBar());
-                          },
+                    Center(
+                      child: Text(
+                        'Total Participants: $totalParticipants',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
-                        const Spacer(flex: 1),
-                        Center(
-                          child: Text(
-                            'Total Participants: $totalParticipants',
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        const Spacer(flex: 2),
-                      ],
+                      ),
                     ),
-
                     // الحضور والغياب الكلي
                     Center(
                       child: RichText(
