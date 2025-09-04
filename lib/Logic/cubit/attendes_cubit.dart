@@ -24,33 +24,43 @@ class BranchMembersCubit extends Cubit<BranchMembersState> {
     }
   }
 
-  Future<void> addMember({
-  required String id,
-  required String name,
-  required String email,
-  required String team,
-}) async {
-  try {
-    final success = await repository.addBranchMember({
-      'id': id,
-      'Name': name,
-      'email': email,
-      'Team': team,
-      'attendance': false,
-      'scannedAt': null,
-    });
-
-    if (!success) {
-      emit(BranchMembersError("Failed to insert member"));
-    } else {
-      // تقدر تعمل emit لنجاح هنا لو عايز
+  /// ✅ مسح عضو
+  Future<void> deleteMember(String id) async {
+    try {
+      await repository.deleteMember(id);
+      emit(BranchMemberDeleted());
+      // الاستريم هيجيب النسخة الجديدة بعد المسح
+    } catch (e) {
+      emit(BranchMembersError(e.toString()));
     }
-  } catch (e) {
-    emit(BranchMembersError(e.toString()));
-    rethrow; // 👈 دي مهمة عشان الـ UI يقدر يلتقط الغلط في onPressed
   }
-}
 
+  Future<void> addMember({
+    required String id,
+    required String name,
+    required String email,
+    required String team,
+  }) async {
+    try {
+      final success = await repository.addBranchMember({
+        'id': id,
+        'Name': name,
+        'email': email,
+        'Team': team,
+        'attendance': false,
+        'scannedAt': null,
+      });
+
+      if (!success) {
+        emit(BranchMembersError("Failed to insert member"));
+      } else {
+        // تقدر تعمل emit لنجاح هنا لو عايز
+      }
+    } catch (e) {
+      emit(BranchMembersError(e.toString()));
+      rethrow; // 👈 دي مهمة عشان الـ UI يقدر يلتقط الغلط في onPressed
+    }
+  }
 
   /// ✅ بحث
   Future<void> searchMembers(String query) async {

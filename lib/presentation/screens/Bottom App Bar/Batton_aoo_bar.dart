@@ -115,7 +115,7 @@ class _ModernBottomNavState extends State<ModernBottomNav> {
         border: Border.all(
           color: AppColors.Blue,
           style: BorderStyle.solid,
-          width: 2,
+          width: .1,
         ),
         boxShadow: [
           BoxShadow(
@@ -138,7 +138,7 @@ class _ModernBottomNavState extends State<ModernBottomNav> {
       ),
     );
   }
-  
+
   Widget _buildNavItem(IconData icon, int index, String label) {
     bool isSelected = _currentIndex == index;
 

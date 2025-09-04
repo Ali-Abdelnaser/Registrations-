@@ -236,9 +236,19 @@ class _ScannedParticipantsScreenState extends State<ScannedParticipantsScreen> {
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: ListTile(
-                                    leading: const Icon(
-                                      Icons.check,
-                                      color: Colors.white,
+                                    leading: CircleAvatar(
+                                      backgroundColor: AppColors.white
+                                          .withValues(alpha: 0.7),
+                                      child: Text(
+                                        person.name.isNotEmpty
+                                            ? person.name[0].toUpperCase()
+                                            : "?",
+                                        style: const TextStyle(
+                                          color: AppColors.Blue,
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
                                     title: Text(
                                       person.name,
@@ -259,9 +269,11 @@ class _ScannedParticipantsScreenState extends State<ScannedParticipantsScreen> {
                                     ),
 
                                     trailing: IconButton(
-                                      icon: const Icon(
+                                      icon: Icon(
                                         Icons.delete_rounded,
-                                        color: Colors.red,
+                                        color: AppColors.red.withValues(
+                                          alpha: 0.9,
+                                        ),
                                         size: 30,
                                       ),
                                       onPressed: () async {

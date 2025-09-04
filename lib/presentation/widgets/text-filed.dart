@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
   final String hint;
   final TextInputType keyboardType;
   final bool obscureText;
+  final TextEditingController? controller;
 
   const CustomTextField({
     super.key,
@@ -16,12 +17,13 @@ class CustomTextField extends StatelessWidget {
     required this.hint,
     this.validator,
     this.keyboardType = TextInputType.text,
-    this.obscureText = false,
+    this.obscureText = false,  this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       cursorColor: AppColors.Blue,
       style: const TextStyle(color: Colors.black87, fontSize: 16),
       onChanged: onChanged,

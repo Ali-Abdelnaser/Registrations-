@@ -67,7 +67,7 @@ class OnBoardingScreen extends StatelessWidget {
               // الزر
               GestureDetector(
                 onTap: () {
-                  AppNavigator.fade(context, LoginPage(), replace: true);
+                  AppNavigator.fade(context, ModernBottomNav(), replace: true);
                 },
                 child: Container(
                   width: size.width * 0.15,

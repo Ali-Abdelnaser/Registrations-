@@ -28,13 +28,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   ];
 
   final Map<String, Color> colors = {
-    'HR': const Color.fromARGB(179, 1, 68, 126),
-    'Logistics': Colors.lightGreenAccent,
-    'Event Management': Colors.orange,
-    'PR': Colors.purple,
-    'Marketing': Colors.blueAccent,
-    'FR': Colors.blueGrey,
-    'Media': Colors.red,
+    'HR': const Color.fromARGB(255, 55, 110, 165), // Soft Blue
+    'Logistics': const Color(0xFF8ABF88), // Soft Green
+    'Event Management': const Color(0xFFF4A261), // Warm Orange
+    'PR': const Color(0xFF9D6B99), // Muted Purple
+    'Marketing': const Color(0xFF4D96FF), // Sky Blue
+    'FR': const Color(0xFF7C99AC), // Cool Gray-Blue
+    'Media': const Color(0xFFE76F51), // Soft Red/Coral
   };
 
   @override
@@ -250,7 +250,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                     const SizedBox(height: 20),
 
-                    // كروت الفرق
                     ...teams.map((team) {
                       final attended = attendedCounts[team]?.toInt() ?? 0;
                       final total = totalCounts[team] ?? 0;
@@ -277,35 +276,88 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           );
                         },
                         child: Card(
-                          color: const Color.fromARGB(207, 211, 210, 210),
-                          margin: const EdgeInsets.symmetric(vertical: 8),
-                          elevation: 2,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          elevation: 5,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(18),
                           ),
-                          child: Padding(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18),
+                              gradient: LinearGradient(
+                                colors: [
+                                  colors[team]!.withOpacity(0.2),
+                                  Colors.white,
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
                             padding: const EdgeInsets.symmetric(
                               horizontal: 16,
-                              vertical: 12,
+                              vertical: 18,
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Row(
                               children: [
-                                Text(
-                                  '$team: $attended Attended',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                                // أيقونة الفريق
+                                Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
                                     color: colors[team],
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.group,
+                                    color: Colors.white,
+                                    size: 26,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Total in $team: $total | Absent: $absent',
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                    color: Colors.black54,
+                                const SizedBox(width: 16),
+
+                                // تفاصيل الأرقام
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        team,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: colors[team],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Row(
+                                        children: [
+                                          _buildStat(
+                                            "Attended",
+                                            attended,
+                                            Colors.green,
+                                          ),
+                                          const SizedBox(width: 16),
+                                          _buildStat(
+                                            "Absent",
+                                            absent,
+                                            Colors.red,
+                                          ),
+                                          const SizedBox(width: 16),
+                                          _buildStat(
+                                            "Total",
+                                            total,
+                                            Colors.black87,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
+                                ),
+
+                                const Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 18,
+                                  color: Colors.black54,
                                 ),
                               ],
                             ),
@@ -324,4 +376,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+}
+
+Widget _buildStat(String label, int value, Color color) {
+  return Row(
+    children: [
+      Icon(Icons.circle, size: 10, color: color),
+      const SizedBox(width: 4),
+      Text(
+        "$label: $value",
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          color: color,
+        ),
+      ),
+    ],
+  );
 }

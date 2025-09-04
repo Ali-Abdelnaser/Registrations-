@@ -98,6 +98,15 @@ class AuthRepository {
     }
   }
 
+  /// ✅ مسح عضو بالـ id
+  Future<void> deleteMember(String id) async {
+    try {
+      await _supabase.from('Branch_Members').delete().eq('id', id);
+    } catch (e) {
+      throw Exception("Delete Member Error: $e");
+    }
+  }
+
   /// ✅ تحديث حالة الحضور
   Future<void> markAttendance(String id) async {
     await _supabase
@@ -110,16 +119,15 @@ class AuthRepository {
   }
 
   Future<bool> addBranchMember(Map<String, dynamic> data) async {
-  try {
-    await _supabase.from('Branch_Members').insert(data);
-    return true;
-  } catch (e) {
-    if (e.toString().contains("duplicate") ||
-        e.toString().contains("conflict")) {
-      throw Exception("Member already exists");
+    try {
+      await _supabase.from('Branch_Members').insert(data);
+      return true;
+    } catch (e) {
+      if (e.toString().contains("duplicate") ||
+          e.toString().contains("conflict")) {
+        throw Exception("Member already exists");
+      }
+      throw Exception("Insert failed: $e");
     }
-    throw Exception("Insert failed: $e");
   }
-}
-
 }
