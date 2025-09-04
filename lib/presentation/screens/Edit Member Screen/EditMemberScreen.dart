@@ -4,6 +4,7 @@ import 'package:registration/Logic/cubit/attendes_cubit.dart';
 import 'package:registration/Logic/cubit/attendes_state.dart';
 import 'package:registration/core/constants/app_colors.dart';
 import 'package:registration/data/models/attendee.dart';
+import 'package:registration/presentation/widgets/snakbar.dart';
 import 'package:registration/presentation/widgets/text-filed.dart';
 
 class EditMemberScreen extends StatefulWidget {
@@ -76,16 +77,23 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
           // ✅ بمجرد ما الاستريم يجيب البيانات الجديدة
           Navigator.pop(context, true);
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Member updated successfully!"),
-              backgroundColor: Colors.green,
+            CustomSnakBar(
+              icon: Icons.check_circle,
+              iconColor: Colors.green,
+              text: "Member updated successfully!",
+              textColor: AppColors.Blue,
             ),
           );
         }
 
         if (state is BranchMembersError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+            CustomSnakBar(
+              icon: Icons.error,
+              iconColor: Colors.red,
+              text: state.message,
+              textColor: Colors.red,
+            ),
           );
         }
       },

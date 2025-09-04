@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:registration/Logic/cubit/attendes_cubit.dart';
 import 'package:registration/Logic/cubit/attendes_state.dart';
 import 'package:registration/data/models/attendee.dart';
 import 'package:registration/core/constants/app_colors.dart';
 import 'package:registration/presentation/screens/Skeleton%20Loader/data_mangment_skeleton.dart';
+import 'package:registration/presentation/widgets/snakbar.dart';
 
 class DataManagementScreen extends StatelessWidget {
   const DataManagementScreen({super.key});
@@ -30,73 +32,58 @@ class DataManagementScreen extends StatelessWidget {
             return const Center(child: DataManagementSkeleton());
           }
 
-            if (state is BranchMembersError) {
-              return Scaffold(
-                backgroundColor: Colors.white,
-                body: Center(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // صورة
-                        Center(
-                          child: Image.asset(
-                            "assets/img/error.png",
-                            height: 300,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
+          if (state is BranchMembersError) {
+            return Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset("assets/img/error.png", height: 300),
+                    const SizedBox(height: 16),
 
-                        // رسالة الخطأ
-                        const Text(
-                          "There was an error",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-
-                        // التفاصيل (اختياري لو عايز تعرض state.message)
-                        Text(
-                          state.message,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.black54,
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-
-                        // زرار ريفريش
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            // إعادة تحميل الداتا
-                            context
-                                .read<BranchMembersCubit>()
-                                .loadBranchMembers();
-                          },
-                          icon: const Icon(Icons.refresh),
-                          label: const Text("Retry"),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.Blue,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 12,
-                            ),
-                          ),
-                        ),
-                      ],
+                    const Text(
+                      "There was an error",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 8),
+
+                    Text(
+                      state.message,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        context.read<BranchMembersCubit>().loadBranchMembers();
+                      },
+                      icon: const Icon(Icons.refresh),
+                      label: const Text("Retry"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.Blue,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 12,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              );
-            }
+              ),
+            );
+          }
 
           List<Attendee> members = [];
           if (state is BranchMembersLoaded) {
@@ -155,8 +142,11 @@ class DataManagementScreen extends StatelessWidget {
                           onTap: () async {
                             if (members.isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("No data to export!"),
+                                CustomSnakBar(
+                                  icon: Icons.error,
+                                  iconColor: Colors.red,
+                                  text: "No data to export!",
+                                  textColor: Colors.red,
                                 ),
                               );
                               return;
@@ -167,12 +157,137 @@ class DataManagementScreen extends StatelessWidget {
                                 .exportToExcel(members);
 
                             if (path != null && context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    "Excel exported successfully:\n$path",
-                                  ),
-                                ),
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false, // لازم يضغط زرار
+                                builder: (ctx) {
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    backgroundColor: Colors.white,
+                                    elevation: 8,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(20),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          // ✅ أيقونة
+                                          Container(
+                                            padding: const EdgeInsets.all(14),
+                                            decoration: BoxDecoration(
+                                              color: Colors.green.withOpacity(
+                                                0.1,
+                                              ),
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: const Icon(
+                                              Icons.check_circle,
+                                              color: Colors.green,
+                                              size: 40,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 16),
+
+                                          // ✅ العنوان
+                                          const Text(
+                                            "Export Successful",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black87,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+
+                                          // ✅ المحتوى
+                                          Text(
+                                            "Your Excel file has been saved successfully.\n\nDo you want to open it now?",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              height: 1.5,
+                                              color: Colors.grey[700],
+                                            ),
+                                          ),
+                                          const SizedBox(height: 24),
+
+                                          // ✅ الأزرار
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Expanded(
+                                                child: OutlinedButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(ctx),
+                                                  style: OutlinedButton.styleFrom(
+                                                    side: BorderSide(
+                                                      color:
+                                                          Colors.grey.shade400,
+                                                    ),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            12,
+                                                          ),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                          vertical: 14,
+                                                        ),
+                                                  ),
+                                                  child: const Text(
+                                                    "Later",
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 15,
+                                                      color: Colors.black87,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 12),
+                                              Expanded(
+                                                child: ElevatedButton(
+                                                  onPressed: () async {
+                                                    Navigator.pop(ctx);
+                                                    await OpenFilex.open(path);
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.green,
+                                                    foregroundColor:
+                                                        Colors.white,
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            12,
+                                                          ),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                          vertical: 14,
+                                                        ),
+                                                  ),
+                                                  child: const Text(
+                                                    "Open",
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
                               );
                             }
                           },

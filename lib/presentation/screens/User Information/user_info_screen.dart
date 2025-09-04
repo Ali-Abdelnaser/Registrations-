@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:registration/Logic/cubit/qr_scan_cubit.dart';
 import 'package:registration/Logic/cubit/qr_scan_state.dart';
-
+import 'package:registration/presentation/widgets/snakbar.dart';
 
 class UserInfoScreen extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -67,61 +67,21 @@ class UserInfoScreen extends StatelessWidget {
                               data['attendance'] = true;
                               onConfirm(data);
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: Colors.white,
-                                  elevation: 4,
-                                  behavior: SnackBarBehavior.floating,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  margin: const EdgeInsets.all(16),
-                                  duration: const Duration(seconds: 2),
-                                  content: Row(
-                                    children: const [
-                                      Icon(Icons.check_circle, color: Colors.green),
-                                      SizedBox(width: 12),
-                                      Expanded(
-                                        child: Text(
-                                          'Attendance confirmed successfully!',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.green,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                CustomSnakBar(
+                                  icon: Icons.check_circle,
+                                  iconColor: Colors.green,
+                                  text: "Attendance confirmed successfully!",
+                                  textColor: Colors.green,
                                 ),
                               );
                               Navigator.pop(context, true);
                             } else if (state is QrError) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: Colors.white,
-                                  elevation: 4,
-                                  behavior: SnackBarBehavior.floating,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  margin: const EdgeInsets.all(16),
-                                  duration: const Duration(seconds: 2),
-                                  content: Row(
-                                    children: [
-                                      const Icon(Icons.error, color: Colors.redAccent),
-                                      const SizedBox(width: 12),
-                                      Expanded(
-                                        child: Text(
-                                          state.message,
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.redAccent,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                CustomSnakBar(
+                                  icon: Icons.error,
+                                  iconColor: Colors.redAccent,
+                                  text: state.message,
+                                  textColor: Colors.redAccent,
                                 ),
                               );
                             }
@@ -138,8 +98,9 @@ class UserInfoScreen extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xff016da6),
                                 foregroundColor: Colors.white,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(16),
                                 ),
@@ -178,8 +139,10 @@ class UserInfoScreen extends StatelessWidget {
           border: Border.all(color: const Color(0xffe0e0e0)),
         ),
         child: ListTile(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 5,
+          ),
           leading: Icon(icon, color: const Color(0xff016da6), size: 28),
           title: Text(
             title,

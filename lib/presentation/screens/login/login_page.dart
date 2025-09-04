@@ -4,6 +4,7 @@ import 'package:registration/data/repositories/attendee_repository.dart';
 import 'package:registration/presentation/screens/Bottom%20App%20Bar/Batton_aoo_bar.dart';
 import 'package:registration/presentation/widgets/navigator.dart';
 import 'package:registration/presentation/widgets/password_TextField.dart';
+import 'package:registration/presentation/widgets/snakbar.dart';
 import 'package:registration/presentation/widgets/text-filed.dart';
 
 class LoginPage extends StatefulWidget {
@@ -30,24 +31,37 @@ class _LoginPageState extends State<LoginPage> {
 
       if (user != null) {
         // ✅ نجاح
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text("تم تسجيل الدخول بنجاح")));
-
+        ScaffoldMessenger.of(context).showSnackBar(
+          CustomSnakBar(
+            icon: Icons.check_circle,
+            iconColor: Colors.green,
+            text: "Login successful",
+            textColor: AppColors.Blue,
+          ),
+        );
         // تروح للـ Home أو Dashboard
         AppNavigator.fade(context, ModernBottomNav());
       } else {
         // ❌ لو رجع null
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("البريد أو كلمة المرور غير صحيحة")),
+          CustomSnakBar(
+            icon: Icons.error,
+            iconColor: Colors.red,
+            text: "Invalid email or password",
+            textColor: AppColors.red,
+          ),
         );
       }
     } catch (e) {
       // ❌ فشل
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("خطأ في تسجيل الدخول: $e")));
-    }
+      ScaffoldMessenger.of(context).showSnackBar(
+        CustomSnakBar(
+          icon: Icons.warning_amber,
+          iconColor: Colors.orange,
+          text: "Login failed: $e",
+          textColor: Colors.orange,
+        ),
+      );}
 
     setState(() => _isLoading = false);
   }

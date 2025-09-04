@@ -33,21 +33,9 @@ class ExcelService {
       }
 
       // get save path
-      Directory? directory;
-      if (Platform.isAndroid) {
-        directory = Directory("/storage/emulated/0/Download");
-        if (!directory.existsSync()) {
-          directory = await getExternalStorageDirectory();
-        }
-      } else if (Platform.isIOS) {
-        directory = await getApplicationDocumentsDirectory();
-      } else {
-        directory = await getDownloadsDirectory(); // Windows/Mac/Linux
-      }
+      final dir = await getApplicationDocumentsDirectory();
+      final path = "${dir.path}/attendance.xlsx";
 
-      final path = "${directory!.path}/attendance.xlsx";
-
-      // save file
       final fileBytes = excel.encode();
       if (fileBytes != null) {
         final file = File(path)

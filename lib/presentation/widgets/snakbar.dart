@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:registration/core/constants/app_colors.dart';
 
 SnackBar CustomSnakBar({
   IconData? icon,
@@ -7,7 +8,7 @@ SnackBar CustomSnakBar({
   Color? textColor,
 }) {
   return SnackBar(
-    backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+    backgroundColor: AppColors.white,
     elevation: 4,
     behavior: SnackBarBehavior.floating,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

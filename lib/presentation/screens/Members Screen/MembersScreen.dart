@@ -6,6 +6,7 @@ import 'package:registration/core/constants/app_colors.dart';
 import 'package:registration/presentation/screens/Edit%20Member%20Screen/EditMemberScreen.dart';
 import 'package:registration/presentation/screens/Skeleton%20Loader/scanned_skeleton.dart';
 import 'package:registration/presentation/widgets/navigator.dart';
+import 'package:registration/presentation/widgets/snakbar.dart';
 
 class MembersScreen extends StatefulWidget {
   const MembersScreen({super.key});
@@ -306,9 +307,11 @@ class _MembersScreenState extends State<MembersScreen> {
                                 );
 
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text("${person.name} deleted"),
-                                    backgroundColor: Colors.red,
+                                  CustomSnakBar(
+                                    icon: Icons.delete,
+                                    iconColor: Colors.red,
+                                    text: "${person.name} deleted",
+                                    textColor: Colors.red,
                                   ),
                                 );
                               },

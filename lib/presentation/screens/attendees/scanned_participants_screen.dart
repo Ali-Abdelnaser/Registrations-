@@ -5,6 +5,7 @@ import 'package:registration/Logic/cubit/attendes_state.dart';
 import 'package:intl/intl.dart';
 import 'package:registration/core/constants/app_colors.dart';
 import 'package:registration/presentation/screens/Skeleton%20Loader/scanned_skeleton.dart';
+import 'package:registration/presentation/widgets/snakbar.dart';
 
 class ScannedParticipantsScreen extends StatefulWidget {
   const ScannedParticipantsScreen({super.key});
@@ -383,71 +384,24 @@ class _ScannedParticipantsScreenState extends State<ScannedParticipantsScreen> {
                                             ScaffoldMessenger.of(
                                               context,
                                             ).showSnackBar(
-                                              SnackBar(
-                                                backgroundColor: Colors.white,
-                                                elevation: 4,
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                ),
-                                                content: Row(
-                                                  children: const [
-                                                    Icon(
-                                                      Icons.check_circle,
-                                                      color: Color(0xff016DA6),
-                                                    ),
-                                                    SizedBox(width: 12),
-                                                    Expanded(
-                                                      child: Text(
-                                                        'Attendance cancelled successfully!',
-                                                        style: TextStyle(
-                                                          color: Color(
-                                                            0xff016DA6,
-                                                          ),
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                              CustomSnakBar(
+                                                icon: Icons.check_circle,
+                                                iconColor: Colors.green,
+                                                text:
+                                                    'Attendance cancelled successfully!',
+                                                textColor: AppColors.Blue,
                                               ),
                                             );
                                           } catch (e) {
                                             ScaffoldMessenger.of(
                                               context,
                                             ).showSnackBar(
-                                              SnackBar(
-                                                backgroundColor:
-                                                    Colors.red.shade50,
-                                                elevation: 4,
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                ),
-                                                content: Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.error,
-                                                      color: Colors.red,
-                                                    ),
-                                                    const SizedBox(width: 12),
-                                                    Expanded(
-                                                      child: Text(
-                                                        'Error cancelling attendance: $e',
-                                                        style: const TextStyle(
-                                                          color: Colors.red,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                              CustomSnakBar(
+                                                icon: Icons.error,
+                                                iconColor: Colors.red,
+                                                text:
+                                                    'Error cancelling attendance: $e',
+                                                textColor: Colors.red,
                                               ),
                                             );
                                           }
