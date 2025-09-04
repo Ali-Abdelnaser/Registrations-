@@ -24,14 +24,29 @@ class BranchMembersCubit extends Cubit<BranchMembersState> {
     }
   }
 
-  /// ✅ مسح عضو
-  Future<void> deleteMember(String id) async {
+  Future<void> importFromExcel(String path) async {
     try {
-      await repository.deleteMember(id);
-      emit(BranchMemberDeleted());
-      // الاستريم هيجيب النسخة الجديدة بعد المسح
+      emit(BranchMembersLoading());
+
+      final members = await repository.importMembersFromExcel(path);
+
+      await repository.deleteAllMembers(); // مسح القديم
+      await repository.addMembersBatch(members); // إضافة الجديد
+
+      loadBranchMembers();
     } catch (e) {
-      emit(BranchMembersError(e.toString()));
+      emit(BranchMembersError("Error importing Excel: $e"));
+    }
+  }
+
+  /// ✅ Export to Excel
+  Future<String?> exportToExcel(List<Attendee> members) async {
+    try {
+      final path = await repository.exportMembersToExcel(members);
+      return path; // بيرجع مكان الملف اللي اتعمل
+    } catch (e) {
+      emit(BranchMembersError("Error exporting Excel: $e"));
+      return null;
     }
   }
 
@@ -93,6 +108,16 @@ class BranchMembersCubit extends Cubit<BranchMembersState> {
       // الاستريم هيعمل التحديث تلقائي
     } catch (e) {
       emit(BranchMembersError(e.toString()));
+    }
+  }
+
+  /// ✅ مسح عضو
+  Future<void> deleteMember(String id) async {
+    try {
+      await repository.deleteBranchMember(id);
+      // الاستريم هيحدث البيانات تلقائي
+    } catch (e) {
+      emit(BranchMembersError("Error deleting member: $e"));
     }
   }
 

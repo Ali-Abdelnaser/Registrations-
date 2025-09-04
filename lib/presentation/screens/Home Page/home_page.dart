@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:registration/Logic/cubit/attendes_cubit.dart';
 import 'package:registration/presentation/screens/Add%20Member/add_member.dart';
+import 'package:registration/presentation/screens/Data%20Management/data_management_screen.dart';
 import 'package:registration/presentation/screens/Members%20Screen/MembersScreen.dart';
 import 'package:registration/presentation/screens/Skeleton%20Loader/home_skeleton.dart';
 import 'package:registration/presentation/screens/scan/qr_scan.dart';
@@ -108,9 +109,9 @@ class HomePage extends StatelessWidget {
                         ),
                         _buildGridItem(
                           context,
-                          Icons.settings,
-                          "Settings",
-                          const Placeholder(),
+                          Icons.manage_accounts_rounded,
+                          "Data Management",
+                          const DataManagementScreen(),
                         ),
                         _buildGridItem(
                           context,

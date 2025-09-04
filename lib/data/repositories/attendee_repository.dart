@@ -1,9 +1,11 @@
 import 'package:registration/data/models/attendee.dart';
+import 'package:registration/data/services/excel_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthRepository {
   final SupabaseClient _supabase = Supabase.instance.client;
 
+  /// ------------------- Auth ------------------- ///
   Future<Attendee?> signIn(String email, String password) async {
     try {
       final response = await _supabase.auth.signInWithPassword(
@@ -26,12 +28,11 @@ class AuthRepository {
     }
   }
 
+  /// ------------------- CRUD ------------------- ///
   Future<List<Attendee>> getBranchMembers() async {
     try {
       final response = await _supabase.from('Branch_Members').select();
-
       final data = response as List<dynamic>;
-
       return data.map((item) => Attendee.fromMap(item)).toList();
     } catch (e) {
       throw Exception("Fetch Branch Members Error: $e");
@@ -48,13 +49,12 @@ class AuthRepository {
         });
   }
 
-  /// ✅ بحث بالاسم أو الإيميل
   Future<List<Attendee>> searchBranchMembers(String query) async {
     try {
       final response = await _supabase
           .from('Branch_Members')
           .select()
-          .ilike('name', '%$query%'); // بيدور بالـ LIKE
+          .ilike('name', '%$query%');
       final data = response as List<dynamic>;
       return data.map((item) => Attendee.fromMap(item)).toList();
     } catch (e) {
@@ -62,15 +62,13 @@ class AuthRepository {
     }
   }
 
-  /// ✅ تعديل بيانات عضو
   Future<Attendee?> getMemberById(String id) async {
     try {
       final Map<String, dynamic>? row = await _supabase
           .from('Branch_Members')
           .select()
           .eq('id', id)
-          .maybeSingle(); // null لو مش لاقي
-
+          .maybeSingle();
       if (row == null) return null;
       return Attendee.fromMap(row);
     } catch (e) {
@@ -89,7 +87,6 @@ class AuthRepository {
     }
   }
 
-  /// ✅ مسح عضو
   Future<void> deleteBranchMember(String id) async {
     try {
       await _supabase.from('Branch_Members').delete().eq('id', id);
@@ -98,24 +95,12 @@ class AuthRepository {
     }
   }
 
-  /// ✅ مسح عضو بالـ id
-  Future<void> deleteMember(String id) async {
+  Future<void> deleteAllMembers() async {
     try {
-      await _supabase.from('Branch_Members').delete().eq('id', id);
+      await _supabase.from('Branch_Members').delete();
     } catch (e) {
-      throw Exception("Delete Member Error: $e");
+      throw Exception("Delete All Members Error: $e");
     }
-  }
-
-  /// ✅ تحديث حالة الحضور
-  Future<void> markAttendance(String id) async {
-    await _supabase
-        .from('Branch_Members')
-        .update({
-          'attendance': true,
-          'scannedAt': DateTime.now().toIso8601String(),
-        })
-        .eq('id', id);
   }
 
   Future<bool> addBranchMember(Map<String, dynamic> data) async {
@@ -129,5 +114,34 @@ class AuthRepository {
       }
       throw Exception("Insert failed: $e");
     }
+  }
+
+  Future<void> addMembersBatch(List<Attendee> members) async {
+    try {
+      final data = members.map((m) => m.toMap()).toList();
+      await _supabase.from('Branch_Members').insert(data);
+    } catch (e) {
+      throw Exception("Add Members Batch Error: $e");
+    }
+  }
+
+  Future<void> markAttendance(String id) async {
+    await _supabase
+        .from('Branch_Members')
+        .update({
+          'attendance': true,
+          'scannedAt': DateTime.now().toIso8601String(),
+        })
+        .eq('id', id);
+  }
+
+  /// ------------------- Excel ------------------- ///
+
+  Future<String> exportMembersToExcel(List<Attendee> members) async {
+    return await ExcelService.exportToExcel(members);
+  }
+
+  Future<List<Attendee>> importMembersFromExcel(String filePath) async {
+    return await ExcelService.importFromExcel(filePath);
   }
 }
