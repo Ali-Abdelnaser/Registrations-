@@ -4,8 +4,6 @@ import 'package:registration/Logic/cubit/attendes_cubit.dart';
 import 'package:registration/Logic/cubit/attendes_state.dart';
 import 'package:registration/core/constants/app_colors.dart';
 import 'package:registration/data/models/attendee.dart';
-import 'package:registration/presentation/widgets/custom_dialog.dart';
-import 'package:registration/presentation/widgets/snakbar.dart';
 import 'package:registration/presentation/widgets/text-filed.dart';
 
 class EditMemberScreen extends StatefulWidget {
@@ -44,7 +42,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
     _emailController = TextEditingController(text: widget.member.email);
     _idController = TextEditingController(text: widget.member.id);
     _team = widget.member.team;
-    _attendance = widget.member.attendance ?? false;
+    _attendance = widget.member.attendance;
   }
 
   @override
