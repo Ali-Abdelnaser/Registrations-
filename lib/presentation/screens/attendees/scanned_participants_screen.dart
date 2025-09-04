@@ -4,7 +4,7 @@ import 'package:registration/Logic/cubit/attendes_cubit.dart';
 import 'package:registration/Logic/cubit/attendes_state.dart';
 import 'package:intl/intl.dart';
 import 'package:registration/core/constants/app_colors.dart';
-import 'package:registration/presentation/screens/Skeleton%20Loader/home_skeleton.dart';
+import 'package:registration/presentation/screens/Skeleton%20Loader/scanned_skeleton.dart';
 
 class ScannedParticipantsScreen extends StatefulWidget {
   const ScannedParticipantsScreen({super.key});
@@ -49,7 +49,7 @@ class _ScannedParticipantsScreenState extends State<ScannedParticipantsScreen> {
     return BlocBuilder<BranchMembersCubit, BranchMembersState>(
       builder: (context, state) {
         if (state is BranchMembersLoading) {
-          return Center(child: HomePageSkeleton());
+          return Center(child: ScannedParticipantsSkeleton());
         }
 
         if (state is BranchMembersError) {
@@ -282,7 +282,7 @@ class _ScannedParticipantsScreenState extends State<ScannedParticipantsScreen> {
           );
         }
 
-        return Center(child: HomePageSkeleton());
+        return Center(child: ScannedParticipantsSkeleton());
       },
     );
   }

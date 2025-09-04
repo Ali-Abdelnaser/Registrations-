@@ -6,7 +6,6 @@ import 'package:registration/Logic/cubit/attendes_state.dart';
 import 'package:registration/core/constants/app_colors.dart';
 import 'package:registration/data/models/attendee.dart';
 import 'package:registration/presentation/screens/Skeleton%20Loader/DashboardSkeleton.dart';
-import 'package:registration/presentation/screens/Skeleton%20Loader/home_skeleton.dart';
 import 'package:registration/presentation/screens/Team%20Absent/team_absent.dart';
 
 import 'package:registration/presentation/widgets/navigator.dart';
