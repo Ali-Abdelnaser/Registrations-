@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:registration/presentation/screens/Add%20Member/add_member.dart';
-import 'package:registration/presentation/screens/attendees/scanned_participants_screen.dart';
+import 'package:registration/presentation/screens/Skeleton%20Loader/home_skeleton.dart';
 import 'package:registration/presentation/screens/scan/qr_scan.dart';
 import 'package:registration/presentation/widgets/navigator.dart';
 
@@ -81,7 +81,7 @@ class HomePage extends StatelessWidget {
                         context,
                         Icons.settings,
                         "Settings",
-                        const Placeholder(),
+                        const HomePageSkeleton(),
                       ),
                       _buildGridItem(
                         context,

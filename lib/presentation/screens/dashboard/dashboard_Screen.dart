@@ -3,8 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:registration/Logic/cubit/attendes_cubit.dart';
 import 'package:registration/Logic/cubit/attendes_state.dart';
+import 'package:registration/core/constants/app_colors.dart';
 import 'package:registration/data/models/attendee.dart';
+import 'package:registration/presentation/screens/Skeleton%20Loader/DashboardSkeleton.dart';
+import 'package:registration/presentation/screens/Skeleton%20Loader/home_skeleton.dart';
 import 'package:registration/presentation/screens/Team%20Absent/team_absent.dart';
+
 import 'package:registration/presentation/widgets/navigator.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -50,14 +54,73 @@ class _DashboardScreenState extends State<DashboardScreen> {
           builder: (context, state) {
             if (state is BranchMembersLoading ||
                 state is BranchMembersInitial) {
-              return const Center(child: CircularProgressIndicator());
+              return Center(child: DashboardSkeleton());
             }
 
             if (state is BranchMembersError) {
-              return Center(
-                child: Text(
-                  "Error: ${state.message}",
-                  style: const TextStyle(color: Colors.red),
+              return Scaffold(
+                backgroundColor: Colors.white,
+                body: Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // صورة
+                        Center(
+                          child: Image.asset(
+                            "assets/img/error.png",
+                            height: 300,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        // رسالة الخطأ
+                        const Text(
+                          "There was an error",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+
+                        // التفاصيل (اختياري لو عايز تعرض state.message)
+                        Text(
+                          state.message,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black54,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+
+                        // زرار ريفريش
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            // إعادة تحميل الداتا
+                            context
+                                .read<BranchMembersCubit>()
+                                .loadBranchMembers();
+                          },
+                          icon: const Icon(Icons.refresh),
+                          label: const Text("Retry"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.Blue,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               );
             }
@@ -157,10 +220,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       height: 55,
                       child: ElevatedButton.icon(
                         onPressed: () async {
-                          // await exportParticipantsAsExcel(
-                          //   context,
-                          //   members.map((m) => m.toMap()).toList(),
-                          // );
+                          // final list = members.map((m) => m.toMap()).toList();
+                          // await exportParticipantsAsExcel(context, list);
                         },
                         icon: const Icon(
                           Icons.file_download_outlined,
@@ -247,7 +308,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               );
             }
 
-            return const SizedBox();
+            return const DashboardSkeleton();
           },
         ),
       ),

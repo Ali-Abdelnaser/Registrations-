@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:registration/Logic/cubit/internet_cubit.dart';
 import 'package:registration/core/constants/app_colors.dart';
 import 'package:registration/presentation/screens/Home%20Page/home_page.dart';
+import 'package:registration/presentation/screens/Skeleton%20Loader/home_skeleton.dart';
 import 'package:registration/presentation/screens/attendees/scanned_participants_screen.dart';
 import 'package:registration/presentation/screens/dashboard/dashboard_screen.dart';
 
@@ -20,7 +23,6 @@ class _ModernBottomNavState extends State<ModernBottomNav> {
   @override
   void initState() {
     super.initState();
-
     _pages = [
       HomePage(key: const PageStorageKey("HomePage")),
       ScannedParticipantsScreen(key: const PageStorageKey("Scanned")),
@@ -30,21 +32,77 @@ class _ModernBottomNavState extends State<ModernBottomNav> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (_currentIndex != 0) {
-          setState(() => _currentIndex = 0);
-          return false;
+    return BlocBuilder<InternetCubit, InternetState>(
+      builder: (context, state) {
+        if (state is InternetConnected) {
+          // النت موجود → نعرض الـ BottomNavBar بتاعك
+          return WillPopScope(
+            onWillPop: () async {
+              if (_currentIndex != 0) {
+                setState(() => _currentIndex = 0);
+                return false;
+              }
+              return true;
+            },
+            child: Scaffold(
+              extendBody: true, // علشان البودي يدخل تحت الباتم بار
+              backgroundColor: Colors.white,
+              body: IndexedStack(index: _currentIndex, children: _pages),
+              bottomNavigationBar: _buildBottomNav(),
+            ),
+          );
+        } else if (state is InternetDisconnected) {
+          // النت مش موجود → شاشة بديلة
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Image.asset(
+                        "assets/img/no_internet.png",
+                        height: 350,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "No Internet Connection",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        context.read<InternetCubit>().checkConnection();
+                      },
+                      icon: const Icon(Icons.refresh),
+                      label: const Text("Retry"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.Blue,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
         }
-        return true;
-      },
-      child: Scaffold(
-        extendBody: true, // مهم علشان البودي يدخل تحت الباتم بار
-        backgroundColor: Colors.white, // خليه أبيض مش شفاف
-        body: IndexedStack(index: _currentIndex, children: _pages),
 
-        bottomNavigationBar: _buildBottomNav(),
-      ),
+        // أول حالة (Initial / لسه بيشيك)
+        return HomePageSkeleton();
+      },
     );
   }
 

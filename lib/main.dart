@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:registration/Logic/cubit/attendes_cubit.dart';
+import 'package:registration/Logic/cubit/internet_cubit.dart';
 import 'package:registration/Logic/cubit/qr_scan_cubit.dart';
 import 'package:registration/core/constants/app_strings.dart';
 import 'package:registration/core/route/app_router.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => BranchMembersCubit(branchMembersRepository),
         ),
+        BlocProvider(create: (_) => InternetCubit()),
         BlocProvider(create: (_) => QrScanCubit(branchMembersRepository)),
       ],
       child: MaterialApp(
