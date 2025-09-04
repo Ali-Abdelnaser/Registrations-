@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:registration/Logic/cubit/attendes_cubit.dart';
 import 'package:registration/presentation/screens/Add%20Member/add_member.dart';
 import 'package:registration/presentation/screens/Skeleton%20Loader/home_skeleton.dart';
 import 'package:registration/presentation/screens/scan/qr_scan.dart';
@@ -32,7 +34,7 @@ class HomePage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 60),
 
                   const Text(
                     'Welcome Registration Team',
@@ -54,42 +56,69 @@ class HomePage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 20),
 
                   // ✅ الجريد
-                  GridView.count(
-                    shrinkWrap: true,
-                    physics:
-                        const NeverScrollableScrollPhysics(), // علشان مايحصلش تعارض
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
-                    children: [
-                      _buildGridItem(
-                        context,
-                        Icons.qr_code_scanner,
-                        "Scan QR",
-                        const QRViewScreen(),
-                      ),
-                      _buildGridItem(
-                        context,
-                        Icons.add_circle_outline,
-                        "Add New Member",
-                        AddMemberScreen(),
-                      ),
-                      _buildGridItem(
-                        context,
-                        Icons.settings,
-                        "Settings",
-                        const HomePageSkeleton(),
-                      ),
-                      _buildGridItem(
-                        context,
-                        Icons.info,
-                        "About",
-                        const Placeholder(),
-                      ),
-                    ],
+                  RefreshIndicator(
+                    onRefresh: () async =>
+                        context.read<BranchMembersCubit>().loadBranchMembers(),
+                    child: GridView.count(
+                      shrinkWrap: true,
+                      physics:
+                          const NeverScrollableScrollPhysics(), // علشان مايحصلش تعارض
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20,
+                      children: [
+                        _buildGridItem(
+                          context,
+                          Icons.badge,
+                          "Scan Membar Card",
+                          const QRViewScreen(),
+                        ),
+                        _buildGridItem(
+                          context,
+                          Icons.event,
+                          "Scan Event",
+                          const HomePageSkeleton(),
+                        ),
+                        _buildGridItem(
+                          context,
+                          Icons.add_circle_outline,
+                          "Add New Member",
+                          AddMemberScreen(),
+                        ),
+                        _buildGridItem(
+                          context,
+                          Icons.cloud_upload_sharp,
+                          "Update Member Data",
+                          const HomePageSkeleton(),
+                        ),
+                        _buildGridItem(
+                          context,
+                          Icons.event_repeat,
+                          "Update Event Data",
+                          const HomePageSkeleton(),
+                        ),
+                        _buildGridItem(
+                          context,
+                          Icons.event_seat,
+                          "Event Attendes",
+                          const HomePageSkeleton(),
+                        ),
+                        _buildGridItem(
+                          context,
+                          Icons.settings,
+                          "Settings",
+                          const Placeholder(),
+                        ),
+                        _buildGridItem(
+                          context,
+                          Icons.info,
+                          "About",
+                          const Placeholder(),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -120,7 +149,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: Colors.white, size: 50),
+            Icon(icon, color: Colors.white, size: 60),
             const SizedBox(height: 8),
             Text(
               label,

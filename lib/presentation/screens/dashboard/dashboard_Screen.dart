@@ -20,16 +20,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final List<String> teams = [
     'HR',
     'Logistics',
-    'Assistant',
-    'Business',
+    'Event Management',
+    'Marketing',
+    'PR',
+    'FR',
     'Media',
   ];
 
   final Map<String, Color> colors = {
     'HR': const Color.fromARGB(179, 1, 68, 126),
-    'Logistics': Colors.green,
-    'Assistant': Colors.orange,
-    'Business': Colors.purple,
+    'Logistics': Colors.lightGreenAccent,
+    'Event Management': Colors.orange,
+    'PR': Colors.purple,
+    'Marketing': Colors.blueAccent,
+    'FR': Colors.blueGrey,
     'Media': Colors.red,
   };
 
@@ -254,13 +258,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                       return GestureDetector(
                         onTap: () {
+                          final absents = members
+                              .where(
+                                (m) =>
+                                    m.attendance == false &&
+                                    m.team.trim() == team,
+                              )
+                              .map((m) => m.toMap())
+                              .toList();
+
                           AppNavigator.fade(
                             context,
-                            TeamAbsentsScreen(
+                            TeamallParticipantsScreen(
                               teamName: team,
-                              allParticipants: members
-                                  .map((m) => m.toMap())
-                                  .toList(),
+                              allParticipants: absents,
                             ),
                             replace: false,
                           );

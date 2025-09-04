@@ -33,6 +33,7 @@ class Attendee {
       'id': id,
       'Name': name,
       'Team': team,
+      'email': email,
       'attendance': attendance,
       'scannedAt': scannedAt?.toIso8601String(),
     };

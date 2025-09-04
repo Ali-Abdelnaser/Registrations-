@@ -264,10 +264,182 @@ class _ScannedParticipantsScreenState extends State<ScannedParticipantsScreen> {
                                         color: Colors.red,
                                         size: 30,
                                       ),
-                                      onPressed: () {
-                                        context
-                                            .read<BranchMembersCubit>()
-                                            .resetAttendance(person.id);
+                                      onPressed: () async {
+                                        bool confirmCancel = await showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              backgroundColor: Colors.white,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              titlePadding:
+                                                  EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        MediaQuery.of(
+                                                          context,
+                                                        ).size.width *
+                                                        0.05,
+                                                    vertical: 8,
+                                                  ),
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        MediaQuery.of(
+                                                          context,
+                                                        ).size.width *
+                                                        0.05,
+                                                    vertical: 8,
+                                                  ),
+                                              actionsPadding: EdgeInsets.only(
+                                                right:
+                                                    MediaQuery.of(
+                                                      context,
+                                                    ).size.width *
+                                                    0.03,
+                                                bottom: 10,
+                                              ),
+                                              title: Row(
+                                                children: const [
+                                                  Icon(
+                                                    Icons.warning_amber_rounded,
+                                                    color: Color(0xff016DA6),
+                                                  ),
+                                                  SizedBox(width: 6),
+                                                  Flexible(
+                                                    child: Text(
+                                                      "Cancel Attendance?",
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 20,
+                                                        color: Color(
+                                                          0xff016DA6,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              content: const Text(
+                                                "Are you sure you want to cancel this participant's attendance?",
+                                                style: TextStyle(fontSize: 16),
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () => Navigator.of(
+                                                    context,
+                                                  ).pop(false),
+                                                  child: const Text(
+                                                    'No',
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () => Navigator.of(
+                                                    context,
+                                                  ).pop(true),
+                                                  child: const Text(
+                                                    'Yes',
+                                                    style: TextStyle(
+                                                      color: Color.fromARGB(
+                                                        255,
+                                                        255,
+                                                        0,
+                                                        0,
+                                                      ),
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                        if (confirmCancel) {
+                                          try {
+                                            context
+                                                .read<BranchMembersCubit>()
+                                                .resetAttendance(person.id);
+
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              SnackBar(
+                                                backgroundColor: Colors.white,
+                                                elevation: 4,
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                content: Row(
+                                                  children: const [
+                                                    Icon(
+                                                      Icons.check_circle,
+                                                      color: Color(0xff016DA6),
+                                                    ),
+                                                    SizedBox(width: 12),
+                                                    Expanded(
+                                                      child: Text(
+                                                        'Attendance cancelled successfully!',
+                                                        style: TextStyle(
+                                                          color: Color(
+                                                            0xff016DA6,
+                                                          ),
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          } catch (e) {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              SnackBar(
+                                                backgroundColor:
+                                                    Colors.red.shade50,
+                                                elevation: 4,
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                content: Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.error,
+                                                      color: Colors.red,
+                                                    ),
+                                                    const SizedBox(width: 12),
+                                                    Expanded(
+                                                      child: Text(
+                                                        'Error cancelling attendance: $e',
+                                                        style: const TextStyle(
+                                                          color: Colors.red,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        }
                                       },
                                     ),
                                   ),

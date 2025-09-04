@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:registration/presentation/screens/scan/qr_scan.dart';
+import 'package:registration/presentation/widgets/navigator.dart';
 
-class TeamAbsentsScreen extends StatelessWidget {
+class TeamallParticipantsScreen extends StatelessWidget {
   final String teamName;
   final List<Map<String, dynamic>> allParticipants;
 
-  const TeamAbsentsScreen({
+  const TeamallParticipantsScreen({
     super.key,
     required this.teamName,
     required this.allParticipants,
@@ -12,45 +14,25 @@ class TeamAbsentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final absents = allParticipants
-        .where(
-          (p) =>
-              p['team']?.toString().trim() == teamName &&
-              (p['attendance'] != true),
-        )
-        .toList();
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         scrolledUnderElevation: 0,
-        title: Row(
-          children: [
-            // IconButton(
-            //   icon: const Icon(Icons.arrow_back),
-            //   onPressed: () =>
-            //       AppNavigator.fade(context, const DashboardScreen()),
-            //   color: Colors.black54,
-            // ),
-            Flexible(
-              child: Text(
-                'Absent from $teamName',
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.1,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-          ],
+        title: Text(
+          'Absent from $teamName',
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          style: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.1,
+            fontSize: 18,
+          ),
         ),
         centerTitle: true,
       ),
-      body: absents.isEmpty
+      body: allParticipants.isEmpty
           ? const Center(
               child: Text(
                 '🎉 All members attended!',
@@ -59,9 +41,9 @@ class TeamAbsentsScreen extends StatelessWidget {
             )
           : ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              itemCount: absents.length,
+              itemCount: allParticipants.length,
               itemBuilder: (context, index) {
-                final person = absents[index];
+                final person = allParticipants[index];
 
                 return GestureDetector(
                   onTap: () {
@@ -98,9 +80,9 @@ class TeamAbsentsScreen extends StatelessWidget {
                                   person['id'],
                                   Icons.assignment_ind,
                                 ),
-                                _infoRow("Name", person['name'], Icons.person),
+                                _infoRow("Name", person['Name'], Icons.person),
                                 _infoRow("Email", person['email'], Icons.email),
-                                _infoRow("Team", person['team'], Icons.groups),
+                                _infoRow("Team", person['Team'], Icons.groups),
                               ],
                             ),
                           ),
@@ -118,11 +100,11 @@ class TeamAbsentsScreen extends StatelessWidget {
                     child: ListTile(
                       leading: IconButton(
                         onPressed: () {
-                          // AppNavigator.fade(
-                          //   context,
-                          //   const QRViewScreen(),
-                          //   replace: false,
-                          // );
+                          AppNavigator.fade(
+                            context,
+                            const QRViewScreen(),
+                            replace: false,
+                          );
                         },
                         icon: const Icon(
                           Icons.qr_code_scanner_rounded,
@@ -131,7 +113,7 @@ class TeamAbsentsScreen extends StatelessWidget {
                         ),
                       ),
                       title: Text(
-                        person['name'] ?? 'No Name',
+                        person['Name'] ?? 'No Name',
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

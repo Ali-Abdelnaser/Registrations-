@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:registration/presentation/screens/Bottom%20App%20Bar/Batton_aoo_bar.dart';
+import 'package:registration/presentation/screens/login/login_page.dart';
 
 import 'package:registration/presentation/widgets/navigator.dart';
 
@@ -66,7 +67,7 @@ class OnBoardingScreen extends StatelessWidget {
               // الزر
               GestureDetector(
                 onTap: () {
-                  AppNavigator.fade(context, ModernBottomNav(), replace: true);
+                  AppNavigator.fade(context, LoginPage(), replace: true);
                 },
                 child: Container(
                   width: size.width * 0.15,

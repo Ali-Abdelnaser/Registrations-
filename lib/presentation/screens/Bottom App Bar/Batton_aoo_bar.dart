@@ -108,7 +108,7 @@ class _ModernBottomNavState extends State<ModernBottomNav> {
 
   Widget _buildBottomNav() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),
@@ -138,7 +138,7 @@ class _ModernBottomNavState extends State<ModernBottomNav> {
       ),
     );
   }
-
+  
   Widget _buildNavItem(IconData icon, int index, String label) {
     bool isSelected = _currentIndex == index;
 
