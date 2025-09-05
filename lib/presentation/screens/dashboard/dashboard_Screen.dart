@@ -214,13 +214,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                       chartType: ChartType.disc,
                     ),
-
                     const SizedBox(height: 24),
                     ...teams.map((team) {
                       final attended = attendedCounts[team]?.toInt() ?? 0;
                       final total = totalCounts[team] ?? 0;
-                      final absent = total - attended;
-
                       return GestureDetector(
                         onTap: () {
                           final absents = members

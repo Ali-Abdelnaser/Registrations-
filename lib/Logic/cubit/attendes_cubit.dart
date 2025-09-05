@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:registration/Logic/cubit/attendes_state.dart';
 import 'package:registration/data/models/attendee.dart';

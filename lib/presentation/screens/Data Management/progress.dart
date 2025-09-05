@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:registration/Logic/cubit/attendes_cubit.dart';
 import 'package:registration/Logic/cubit/attendes_state.dart';
 import 'package:registration/core/constants/app_colors.dart';
-import 'package:registration/presentation/screens/Data%20Management/data_management_screen.dart';
 import 'package:registration/presentation/screens/Skeleton%20Loader/data_mangment_skeleton.dart';
 
 class ImportProgressPage extends StatefulWidget {
