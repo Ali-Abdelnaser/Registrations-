@@ -45,7 +45,7 @@ class HomePageSkeleton extends StatelessWidget {
                       crossAxisCount: 2,
                       crossAxisSpacing: 20,
                       mainAxisSpacing: 20,
-                      children: List.generate(4, (index) {
+                      children: List.generate(6, (index) {
                         return Container(
                           decoration: BoxDecoration(
                             color: Colors.white,

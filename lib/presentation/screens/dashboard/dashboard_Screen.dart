@@ -216,40 +216,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
 
                     const SizedBox(height: 24),
-
-                    // زرار تحميل
-                    SizedBox(
-                      width: double.infinity,
-                      height: 55,
-                      child: ElevatedButton.icon(
-                        onPressed: () async {
-                          // final list = members.map((m) => m.toMap()).toList();
-                          // await exportParticipantsAsExcel(context, list);
-                        },
-                        icon: const Icon(
-                          Icons.file_download_outlined,
-                          size: 25,
-                        ),
-                        label: const Text(
-                          'Download Attendance',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xff016da6),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          elevation: 4,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
                     ...teams.map((team) {
                       final attended = attendedCounts[team]?.toInt() ?? 0;
                       final total = totalCounts[team] ?? 0;
@@ -336,12 +302,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             attended,
                                             Colors.green,
                                           ),
-                                          const SizedBox(width: 16),
-                                          _buildStat(
-                                            "Absent",
-                                            absent,
-                                            Colors.red,
-                                          ),
+                                          
                                           const SizedBox(width: 16),
                                           _buildStat(
                                             "Total",

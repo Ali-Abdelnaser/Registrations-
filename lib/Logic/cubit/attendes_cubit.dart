@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:registration/Logic/cubit/attendes_state.dart';
 import 'package:registration/data/models/attendee.dart';
@@ -24,18 +25,70 @@ class BranchMembersCubit extends Cubit<BranchMembersState> {
     }
   }
 
-  Future<void> importFromExcel(String path) async {
+  Future<void> importFromExcel(String filePath) async {
     try {
-      emit(BranchMembersLoading());
+      emit(ImportProgress(progress: 0, current: 0, total: 0));
 
-      final members = await repository.importMembersFromExcel(path);
+      // 1. قراءة الملف
+      final members = await repository.importMembersFromExcel(filePath);
 
-      await repository.deleteAllMembers(); // مسح القديم
-      await repository.addMembersBatch(members); // إضافة الجديد
+      // 2. فلترة عشان نرمي أي صف ملوش id
+      final validMembers = members
+          .where((m) => m.id.trim().isNotEmpty)
+          .toList();
+      final total = validMembers.length;
 
-      loadBranchMembers();
+      if (total == 0) {
+        emit(BranchMembersError("⚠️ لا يوجد سجلات صالحة في الملف."));
+        return;
+      }
+
+      // Counters
+      int current = 0;
+      int inserted = 0;
+      int updated = 0;
+      int skipped = members.length - validMembers.length;
+      int failed = 0;
+
+      // 3. لف على كل عضو
+      for (final m in validMembers) {
+        try {
+          final result = await repository.upsertBranchMember(m.toMap());
+
+          if (result != null && result.isNotEmpty) {
+            inserted++;
+          } else {
+            updated++;
+          }
+        } catch (e) {
+          failed++;
+        } finally {
+          current++;
+          emit(
+            ImportProgress(
+              progress: current / total,
+              current: current,
+              total: total,
+            ),
+          );
+        }
+      }
+
+      // 4. رجّع التقرير النهائي (هنا بس)
+      emit(
+        BranchMembersImportedReport(
+          inserted: inserted,
+          updated: updated,
+          skipped: skipped,
+          failed: failed,
+          total: members.length,
+        ),
+      );
+
+      // 👇 امسح دي، لأنها اللي كانت بتبوظ الـUI
+      // emit(BranchMembersLoaded(validMembers));
     } catch (e) {
-      emit(BranchMembersError("Error importing Excel: $e"));
+      emit(BranchMembersError("Import failed: $e"));
     }
   }
 

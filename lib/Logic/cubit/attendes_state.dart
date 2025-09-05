@@ -29,3 +29,30 @@ class BranchMembersError extends BranchMembersState {
 class BranchMemberUpdated extends BranchMembersState {}
 
 class BranchMemberDeleted extends BranchMembersState {}
+
+class ImportProgress extends BranchMembersState {
+  final double progress;
+  final int current;
+  final int total;
+
+  ImportProgress({
+    required this.progress,
+    required this.current,
+    required this.total,
+  });
+}
+class BranchMembersImportedReport extends BranchMembersState {
+  final int inserted;
+  final int updated;
+  final int skipped;
+  final int failed;
+  final int total;
+
+  BranchMembersImportedReport({
+    required this.inserted,
+    required this.updated,
+    required this.skipped,
+    required this.failed,
+    required this.total,
+  });
+}

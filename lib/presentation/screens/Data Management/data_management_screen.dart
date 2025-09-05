@@ -6,6 +6,7 @@ import 'package:registration/Logic/cubit/attendes_cubit.dart';
 import 'package:registration/Logic/cubit/attendes_state.dart';
 import 'package:registration/data/models/attendee.dart';
 import 'package:registration/core/constants/app_colors.dart';
+import 'package:registration/presentation/screens/Data%20Management/progress.dart';
 import 'package:registration/presentation/screens/Skeleton%20Loader/data_mangment_skeleton.dart';
 import 'package:registration/presentation/widgets/snakbar.dart';
 
@@ -125,9 +126,13 @@ class DataManagementScreen extends StatelessWidget {
                             if (result != null &&
                                 result.files.single.path != null) {
                               final path = result.files.single.path!;
-                              context
-                                  .read<BranchMembersCubit>()
-                                  .importFromExcel(path);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      ImportProgressPage(filePath: path),
+                                ),
+                              );
                             }
                           },
                         ),
@@ -324,7 +329,7 @@ class DataManagementScreen extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.info_outline,
-                          color: Colors.blueGrey,
+                          color: Colors.orange,
                           size: 28,
                         ),
                         SizedBox(width: 12),

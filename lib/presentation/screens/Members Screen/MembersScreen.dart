@@ -293,6 +293,7 @@ class _MembersScreenState extends State<MembersScreen> {
                                         child: const Text(
                                           "Delete",
                                           style: TextStyle(
+                                            color: Colors.white,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),

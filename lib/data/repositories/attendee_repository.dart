@@ -97,7 +97,7 @@ class AuthRepository {
 
   Future<void> deleteAllMembers() async {
     try {
-      await _supabase.from('Branch_Members').delete();
+      await _supabase.from('Branch_Members').delete().neq('id', '');
     } catch (e) {
       throw Exception("Delete All Members Error: $e");
     }
@@ -116,10 +116,19 @@ class AuthRepository {
     }
   }
 
-  Future<void> addMembersBatch(List<Attendee> members) async {
+  Future<void> addMembersBatch(
+    List<Attendee> members, {
+    int chunkSize = 300,
+  }) async {
     try {
-      final data = members.map((m) => m.toMap()).toList();
-      await _supabase.from('Branch_Members').insert(data);
+      for (var i = 0; i < members.length; i += chunkSize) {
+        final slice = members
+            .skip(i)
+            .take(chunkSize)
+            .map((m) => m.toMap())
+            .toList();
+        await _supabase.from('Branch_Members').insert(slice);
+      }
     } catch (e) {
       throw Exception("Add Members Batch Error: $e");
     }
@@ -133,6 +142,19 @@ class AuthRepository {
           'scannedAt': DateTime.now().toIso8601String(),
         })
         .eq('id', id);
+  }
+
+  Future<dynamic> upsertBranchMember(Map<String, dynamic> data) async {
+    try {
+      final response = await _supabase
+          .from('Branch_Members')
+          .upsert(data) // ✅ insert لو جديد، update لو موجود
+          .select(); // عشان يرجع الصف بعد العملية
+
+      return response; // بيرجع List<Map<String,dynamic>>
+    } catch (e) {
+      throw Exception("Upsert Branch Member Error: $e");
+    }
   }
 
   /// ------------------- Excel ------------------- ///
