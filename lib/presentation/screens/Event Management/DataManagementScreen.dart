@@ -6,7 +6,6 @@ import 'package:registration/Logic/cubit/event_cubit.dart';
 import 'package:registration/Logic/cubit/event_state.dart';
 import 'package:registration/data/models/event_participant.dart';
 import 'package:registration/core/constants/app_colors.dart';
-import 'package:registration/presentation/screens/Data%20Management/progress.dart';
 import 'package:registration/presentation/screens/Event%20Management/ImportProgressPage.dart';
 import 'package:registration/presentation/screens/Skeleton%20Loader/data_mangment_skeleton.dart';
 import 'package:registration/presentation/widgets/snakbar.dart';

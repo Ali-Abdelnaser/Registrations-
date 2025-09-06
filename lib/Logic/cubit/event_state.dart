@@ -80,7 +80,13 @@ class EventParticipantsLoaded extends EventState {
 
   @override
   List<Object?> get props => [participants];
+
+  List<EventParticipant> get attended =>
+      participants.where((p) => p.attendance == true).toList();
+
+  List<EventParticipant> get all => participants;
 }
+
 
 /// ✅ في حالة رفع ملف اكسل (Import)
 class EventImporting extends EventState {}

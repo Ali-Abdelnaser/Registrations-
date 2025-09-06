@@ -67,7 +67,18 @@ class ExcelServiceEvent {
           final row = sheet.rows[i];
           if (row.isEmpty || row[0] == null) continue;
 
-          final id = row[0]?.value?.toString() ?? "";
+          // نتأكد ونحوّل الرقم
+          String parseExcelId(dynamic rawId) {
+            if (rawId is int) {
+              return rawId.toString();
+            } else if (rawId is double) {
+              return rawId.truncate().toString(); // بيشيل .0
+            } else {
+              return rawId?.toString() ?? "";
+            }
+          }
+
+          final id = parseExcelId(row[0]?.value);
           final name = row.length > 1 ? row[1]?.value?.toString() ?? "" : "";
           final email = row.length > 2 ? row[2]?.value?.toString() ?? "" : "";
 
