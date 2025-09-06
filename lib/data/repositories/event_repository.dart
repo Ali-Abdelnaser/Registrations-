@@ -18,10 +18,7 @@ class EventRepository {
 
   /// Stream للبارتيسبنتس (لو محتاج لايف ابديتس)
   Stream<List<EventParticipant>> streamParticipants() {
-    return _supabase
-        .from('Event')
-        .stream(primaryKey: ['id'])
-        .map((data) {
+    return _supabase.from('Event').stream(primaryKey: ['id']).map((data) {
       return data.map((e) => EventParticipant.fromMap(e)).toList();
     });
   }
@@ -44,8 +41,11 @@ class EventRepository {
   /// جلب شخص واحد بالـ ID (لما يتعمل سكان)
   Future<EventParticipant?> getParticipantById(String id) async {
     try {
-      final Map<String, dynamic>? row =
-          await _supabase.from('Event').select().eq('id', id).maybeSingle();
+      final Map<String, dynamic>? row = await _supabase
+          .from('Event')
+          .select()
+          .eq('id', id)
+          .maybeSingle();
       if (row == null) return null;
       return EventParticipant.fromMap(row);
     } catch (e) {
@@ -56,23 +56,50 @@ class EventRepository {
   /// تحديث حضور الشخص بعد السكان
   Future<void> markAttendance(String id) async {
     try {
-      await _supabase.from('Event').update({
-        'attendance': true,
-        'scannedAt': DateTime.now().toIso8601String(),
-      }).eq('id', id);
+      await _supabase
+          .from('Event')
+          .update({
+            'attendance': true,
+            'scannedAt': DateTime.now().toIso8601String(),
+          })
+          .eq('id', id);
     } catch (e) {
       throw Exception("Mark Attendance Error: $e");
     }
   }
 
   /// upsert (لو عاوز تضيف أو تحدث حسب الـ id)
-  Future<dynamic> upsertParticipant(Map<String, dynamic> data) async {
+Future<List<Map<String, dynamic>>> upsertParticipants(
+    List<Map<String, dynamic>> data) async {
+  try {
+    final response = await _supabase
+        .from('Event')
+        .upsert(data, onConflict: 'id')
+        .select(); // 👈 بيرجع PostgrestList
+
+    print("✅ Upserted ${response.length} rows");
+    return List<Map<String, dynamic>>.from(response);
+  } catch (e) {
+    throw Exception("Upsert Participants Error: $e");
+  }
+}
+
+
+  /// امسح كل المشاركين
+  Future<void> clearAllParticipants() async {
     try {
-      final response =
-          await _supabase.from('Event').upsert(data).select();
-      return response;
+      await _supabase.from('Event').delete().neq('id', '');
     } catch (e) {
-      throw Exception("Upsert Participant Error: $e");
+      throw Exception("Clear Participants Error: $e");
+    }
+  }
+
+  /// Insert participants (bulk insert)
+  Future<void> insertParticipants(List<Map<String, dynamic>> data) async {
+    try {
+      await _supabase.from('Event').insert(data);
+    } catch (e) {
+      throw Exception("Insert Participants Error: $e");
     }
   }
 }

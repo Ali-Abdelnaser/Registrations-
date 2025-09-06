@@ -29,7 +29,7 @@ class BranchMembersError extends BranchMembersState {
 class BranchMemberUpdated extends BranchMembersState {}
 
 class BranchMemberDeleted extends BranchMembersState {}
-
+class ImportPreparing extends BranchMembersState {}
 class ImportProgress extends BranchMembersState {
   final double progress;
   final int current;

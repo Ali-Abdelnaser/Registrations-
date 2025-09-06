@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:registration/Logic/cubit/attendes_cubit.dart';
 import 'package:registration/presentation/screens/Add%20Member/add_member.dart';
 import 'package:registration/presentation/screens/Data%20Management/data_management_screen.dart';
+import 'package:registration/presentation/screens/Event%20Management/DataManagementScreen.dart';
 import 'package:registration/presentation/screens/Event%20Scan%20Screen/EventScanScreen.dart';
 import 'package:registration/presentation/screens/Members%20Screen/MembersScreen.dart';
 import 'package:registration/presentation/screens/Skeleton%20Loader/home_skeleton.dart';
@@ -100,7 +101,7 @@ class HomePage extends StatelessWidget {
                           context,
                           Icons.event_repeat,
                           "Update Event Data",
-                          const HomePageSkeleton(),
+                          const EventDataManagementScreen(),
                         ),
                         _buildGridItem(
                           context,

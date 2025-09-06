@@ -2,16 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:registration/Logic/cubit/attendes_cubit.dart';
-import 'package:registration/Logic/cubit/attendes_state.dart';
-import 'package:registration/data/models/attendee.dart';
+import 'package:registration/Logic/cubit/event_cubit.dart';
+import 'package:registration/Logic/cubit/event_state.dart';
+import 'package:registration/data/models/event_participant.dart';
 import 'package:registration/core/constants/app_colors.dart';
 import 'package:registration/presentation/screens/Data%20Management/progress.dart';
+import 'package:registration/presentation/screens/Event%20Management/ImportProgressPage.dart';
 import 'package:registration/presentation/screens/Skeleton%20Loader/data_mangment_skeleton.dart';
 import 'package:registration/presentation/widgets/snakbar.dart';
 
-class DataManagementScreen extends StatelessWidget {
-  const DataManagementScreen({super.key});
+class EventDataManagementScreen extends StatefulWidget {
+  const EventDataManagementScreen({super.key});
+
+  @override
+  State<EventDataManagementScreen> createState() =>
+      _EventDataManagementScreenState();
+}
+
+class _EventDataManagementScreenState extends State<EventDataManagementScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context
+        .read<EventCubit>()
+        .loadParticipants(); // ⬅️ تحميل أول ما تفتح الشاشة
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +34,7 @@ class DataManagementScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          "Data Management",
+          "Event Data Management",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -27,12 +42,12 @@ class DataManagementScreen extends StatelessWidget {
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
       ),
-      body: BlocBuilder<BranchMembersCubit, BranchMembersState>(
+      body: BlocBuilder<EventCubit, EventState>(
         builder: (context, state) {
-          if (state is BranchMembersLoading || state is ImportPreparing) {
+          if (state is EventParticipantsLoading) {
             return const Center(child: DataManagementSkeleton());
           }
-          if (state is BranchMembersError) {
+          if (state is EventError) {
             return Center(
               child: SingleChildScrollView(
                 child: Column(
@@ -63,7 +78,7 @@ class DataManagementScreen extends StatelessWidget {
 
                     ElevatedButton.icon(
                       onPressed: () {
-                        context.read<BranchMembersCubit>().loadBranchMembers();
+                        context.read<EventCubit>().loadParticipants();
                       },
                       icon: const Icon(Icons.refresh),
                       label: const Text("Retry"),
@@ -85,14 +100,14 @@ class DataManagementScreen extends StatelessWidget {
             );
           }
 
-          List<Attendee> members = [];
-          if (state is BranchMembersLoaded) {
-            members = state.members;
+          List<EventParticipant> participants = [];
+          if (state is EventParticipantsLoaded) {
+            participants = state.participants;
           }
 
           return RefreshIndicator(
             onRefresh: () async {
-              context.read<BranchMembersCubit>().loadBranchMembers();
+              context.read<EventCubit>().loadParticipants();
             },
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
@@ -100,10 +115,7 @@ class DataManagementScreen extends StatelessWidget {
               child: Column(
                 children: [
                   // ✅ صورة فوق
-                  Image.asset(
-                    "assets/img/data.png", // مسار الصورة بتاعتك
-                    height: 300,
-                  ),
+                  Image.asset("assets/img/data.png", height: 300),
                   const SizedBox(height: 40),
 
                   // ✅ زرارين جنب بعض
@@ -129,7 +141,7 @@ class DataManagementScreen extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) =>
-                                      ImportProgressPage(filePath: path),
+                                      ImportEventProgressPage(filePath: path),
                                 ),
                               );
                             }
@@ -144,7 +156,7 @@ class DataManagementScreen extends StatelessWidget {
                           label: "Export Excel",
                           color: Colors.green,
                           onTap: () async {
-                            if (members.isEmpty) {
+                            if (participants.isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 CustomSnakBar(
                                   icon: Icons.error,
@@ -157,13 +169,13 @@ class DataManagementScreen extends StatelessWidget {
                             }
 
                             final path = await context
-                                .read<BranchMembersCubit>()
-                                .exportToExcel(members);
+                                .read<EventCubit>()
+                                .exportToExcel(participants);
 
                             if (path != null && context.mounted) {
                               showDialog(
                                 context: context,
-                                barrierDismissible: false, // لازم يضغط زرار
+                                barrierDismissible: false,
                                 builder: (ctx) {
                                   return Dialog(
                                     shape: RoundedRectangleBorder(
@@ -176,12 +188,11 @@ class DataManagementScreen extends StatelessWidget {
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          // ✅ أيقونة
                                           Container(
                                             padding: const EdgeInsets.all(14),
                                             decoration: BoxDecoration(
-                                              color: Colors.green.withOpacity(
-                                                0.1,
+                                              color: Colors.green.withValues(
+                                                alpha: .1,
                                               ),
                                               shape: BoxShape.circle,
                                             ),
@@ -192,8 +203,6 @@ class DataManagementScreen extends StatelessWidget {
                                             ),
                                           ),
                                           const SizedBox(height: 16),
-
-                                          // ✅ العنوان
                                           const Text(
                                             "Export Successful",
                                             style: TextStyle(
@@ -203,8 +212,6 @@ class DataManagementScreen extends StatelessWidget {
                                             ),
                                           ),
                                           const SizedBox(height: 10),
-
-                                          // ✅ المحتوى
                                           Text(
                                             "Your Excel file has been saved successfully.\n\nDo you want to open it now?",
                                             textAlign: TextAlign.center,
@@ -215,8 +222,6 @@ class DataManagementScreen extends StatelessWidget {
                                             ),
                                           ),
                                           const SizedBox(height: 24),
-
-                                          // ✅ الأزرار
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
@@ -317,7 +322,7 @@ class DataManagementScreen extends StatelessWidget {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: .05),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -326,35 +331,35 @@ class DataManagementScreen extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.info_outline,
                           color: Colors.orange,
                           size: 28,
                         ),
-                        SizedBox(width: 12),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: RichText(
                             textAlign: TextAlign.center,
-                            text: TextSpan(
-                              style: const TextStyle(
+                            text: const TextSpan(
+                              style: TextStyle(
                                 color: Colors.black87,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
                                 height: 1.4,
                               ),
                               children: [
-                                const TextSpan(
+                                TextSpan(
                                   text:
                                       "Note: Only Excel files are supported.\nAccepted formats: ",
                                 ),
                                 TextSpan(
                                   text: ".xlsx",
-                                  style: const TextStyle(color: Colors.green),
+                                  style: TextStyle(color: Colors.green),
                                 ),
-                                const TextSpan(text: " or "),
+                                TextSpan(text: " or "),
                                 TextSpan(
                                   text: ".xls",
-                                  style: const TextStyle(color: Colors.green),
+                                  style: TextStyle(color: Colors.green),
                                 ),
                               ],
                             ),

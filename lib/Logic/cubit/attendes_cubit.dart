@@ -26,6 +26,7 @@ class BranchMembersCubit extends Cubit<BranchMembersState> {
 
   Future<void> importFromExcel(String filePath) async {
     try {
+      emit(ImportPreparing());
       emit(ImportProgress(progress: 0, current: 0, total: 0));
 
       // 1. قراءة الملف
@@ -144,7 +145,6 @@ class BranchMembersCubit extends Cubit<BranchMembersState> {
   Future<void> updateMember(String id, Map<String, dynamic> updates) async {
     try {
       await repository.updateBranchMember(id, updates);
-      // مفيش داعي تبعت State جديد هنا، الاستريم هيجيب الداتا بعد التحديث
     } catch (e) {
       emit(BranchMembersError(e.toString()));
     }
@@ -157,7 +157,6 @@ class BranchMembersCubit extends Cubit<BranchMembersState> {
         'attendance': false,
         'scannedAt': null, // ✅ هنخليها فاضية
       });
-      // الاستريم هيعمل التحديث تلقائي
     } catch (e) {
       emit(BranchMembersError(e.toString()));
     }
