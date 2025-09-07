@@ -9,7 +9,7 @@ import 'package:registration/core/route/app_router.dart';
 import 'package:registration/data/repositories/attendee_repository.dart';
 import 'package:registration/data/repositories/event_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
+/// Flutter version 3.32.4
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => EventCubit(EventRepository())),
       ],
       child: MaterialApp(
+        title: "Registration",
         debugShowCheckedModeBanner: false,
         initialRoute: Start,
         onGenerateRoute: AppRouter.onGenerateRoute,

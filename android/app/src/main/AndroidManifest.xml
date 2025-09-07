@@ -3,7 +3,7 @@
 
 
     <application
-        android:label="registration"
+        android:label="Registration"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
        
